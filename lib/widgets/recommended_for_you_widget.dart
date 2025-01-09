@@ -161,7 +161,7 @@ class _RecommendedForYouWidgetState extends State<RecommendedForYouWidget> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              "${age.isNotEmpty ? '$age Yrs' : ''} | ${partner.height} cm",
+                              "${partner.age} yrs | ${partner.height} cm",
                               style: customTextStyle(
                                 fontSize: screenWidth * 0.028,
                                 color: const Color(0xff686D76),

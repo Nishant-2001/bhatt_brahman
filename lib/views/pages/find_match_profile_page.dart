@@ -22,18 +22,154 @@ class _FindMatchProfilePageState extends State<FindMatchProfilePage> {
   late PartnerModel partner;
   final ScrollController scrollController = ScrollController();
 
+  Future<void> showConfirmation(context) async {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20.0),
+          ),
+          child: Container(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  "Are you sure you want to report?",
+                  style: customTextStyle(
+                    fontSize: 16,
+                    color: const Color(0xff686D76),
+                  ),
+                ),
+                height(25),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Text(
+                        "No",
+                        style: customTextStyle(
+                          fontSize: 16,
+                          color: const Color(0xff686D76),
+                        ),
+                      ),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        reportController.sendReportRequest(partner.id);
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppConstant.appMainColor,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 30,
+                          vertical: 10,
+                        ),
+                      ),
+                      child: Text(
+                        "Yes",
+                        style: customTextStyle(
+                          fontSize: 16,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  void showReportDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return Dialog(
+          backgroundColor: const Color(0xffffffff),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          child: Container(
+            width: Get.width * 0.9,
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Report",
+                    style: customTextStyle(
+                        fontSize: 16, fontWeight: FontWeight.w500),
+                  ),
+                  height(Get.height * 0.03),
+                  TextFormField(
+                    controller: reportController.descriptionController,
+                    decoration: InputDecoration(
+                        hintText: "Enter Description...",
+                        hintStyle: customTextStyle(
+                            fontSize: 14, fontWeight: FontWeight.w400),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        )),
+                    maxLines: 6,
+                  ),
+                  height(Get.height * 0.03),
+                  Material(
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).pop();
+                        showConfirmation(context);
+                      },
+                      child: Container(
+                        width: Get.width,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                            color: const Color(0xffffffff),
+                            gradient: const LinearGradient(
+                              colors: [Color(0xff2A3171), Color(0xff4E5CD3)],
+                              begin: Alignment.centerLeft,
+                              end: Alignment.centerRight,
+                            ),
+                            borderRadius: BorderRadius.circular(25)),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 7.0),
+                          child: Text(
+                            "Submit",
+                            style: GoogleFonts.sourceSans3(
+                                textStyle: const TextStyle(
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 16,
+                                    color: Color(0xffffffff))),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   @override
   void dispose() {
     scrollController.dispose();
     super.dispose();
-  }
-
-  void scrollToTop() {
-    if (scrollController.hasClients) {
-      scrollController.jumpTo(0);
-    } else {
-      log("ScrollController not attached to any scrollable widget.");
-    }
   }
 
   @override
@@ -41,15 +177,6 @@ class _FindMatchProfilePageState extends State<FindMatchProfilePage> {
     final partner = widget.partner;
     return Scaffold(
       backgroundColor: AppConstant.appMainColor,
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: scrollToTop,
-      //   shape: const CircleBorder(),
-      //   backgroundColor: const Color(0xffE8461C),
-      //   child: const Icon(
-      //     Icons.arrow_upward,
-      //     color: Color(0xffffffff),
-      //   ),
-      // ),
       appBar: AppBar(
         backgroundColor: AppConstant.appMainColor,
         iconTheme: const IconThemeData(color: Color(0xffffffff)),
@@ -79,14 +206,18 @@ class _FindMatchProfilePageState extends State<FindMatchProfilePage> {
                   'Block',
                   style: customTextStyle(fontWeight: FontWeight.w500),
                 ),
-                onTap: () {},
+                onTap: () {
+                  blockProfileController.sendBlockRequest(partner.id);
+                },
               ),
               PopupMenuItem(
                 child: Text(
                   'Report',
                   style: customTextStyle(fontWeight: FontWeight.w500),
                 ),
-                onTap: () {},
+                onTap: () {
+                  showReportDialog(context);
+                },
               ),
             ],
           ),
@@ -216,10 +347,8 @@ class _FindMatchProfilePageState extends State<FindMatchProfilePage> {
                                 buildRow("Date of Birth :", partner.dob),
                                 buildRow("Age (yrs) :",
                                     "${partner.age ?? 'Not available'} ${partner.age != null ? '' : ''}"),
-                                buildRow(
-                                    "Height (cm) :", "${partner.height}"),
-                                buildRow(
-                                    "Weight (kg) :", "${partner.weight}"),
+                                buildRow("Height (cm) :", "${partner.height}"),
+                                buildRow("Weight (kg) :", "${partner.weight}"),
                                 buildRow(
                                     "Blood Group :", "${partner.bloodGroup} "),
                                 buildRow("Body Type :", partner.bodyType ?? ""),

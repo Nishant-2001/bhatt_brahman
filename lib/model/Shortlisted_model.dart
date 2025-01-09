@@ -3,6 +3,7 @@ class ShortlistedModel {
   final String userId;
   final String interestedPersonId;
   final String parentId;
+  final String blockPersonId;
   final String profileImg;
   final String userType;
   final String createdBy;
@@ -54,6 +55,7 @@ class ShortlistedModel {
     required this.userId,
     required this.interestedPersonId,
     required this.parentId,
+    required this.blockPersonId,
     required this.profileImg,
     required this.userType,
     required this.createdBy,
@@ -105,8 +107,8 @@ class ShortlistedModel {
     return ShortlistedModel(
       id: json['id'],
       userId: json['user_id'],
-      interestedPersonId: json['interest_person_id'],
-      parentId: json['parent_id'],
+      interestedPersonId: json['interest_person_id'] ?? "",
+      parentId: json['parent_id'] ?? "",
       profileImg: json['profile_img'] ?? "",
       userType: json['user_type'] ?? "",
       createdBy: json['create_by_name'] ?? " ",
@@ -152,6 +154,7 @@ class ShortlistedModel {
       matchPercentage: json['match_percentage'] ?? " ",
       parentContact: json['parent_contact'] ?? " ",
       preferBodyType: json['preference_body_type_name'] ?? "",
+      blockPersonId: json['block_person'] ?? "",
     );
   }
 }

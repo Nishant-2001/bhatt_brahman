@@ -8,8 +8,8 @@ import 'package:http/http.dart' as http;
 import '../constants/api_endpoints.dart';
 import '../model/Shortlisted_model.dart';
 
-class ShortlistController extends GetxController {
-  Future<void> sendShortlistRequest(interestedPersonId) async {
+class BlockProfileController extends GetxController {
+  Future<void> sendBlockRequest(blockPersonId) async {
     try {
       final prefs = await SharedPreferences.getInstance();
       final userId = prefs.getString('childId') ?? '';
@@ -19,33 +19,32 @@ class ShortlistController extends GetxController {
         return;
       }
 
-      final url = Uri.parse("${baseUrl}send_shortlist");
+      final url = Uri.parse("${baseUrl}blocked_user/");
+
       final token = prefs.getString('token');
 
-      final response = await http.post(url, headers: {
-        "token": "$token"
-      }, body: {
-        "user_id": userId,
-        "interest_person_id": interestedPersonId,
-      });
+      final response = await http.post(url,
+          headers: {"token": "$token"},
+          body: {"user_id": userId, "block_person": blockPersonId});
 
       if (response.statusCode == 200) {
         final responseData = json.decode(response.body);
         final msg = responseData["msg"] ?? '';
+
         if (responseData['status'] == 200) {
           Get.snackbar("Success", msg,
               backgroundColor: Colors.green, colorText: Colors.white);
         }
       } else {
-        Get.snackbar("Failed", "Failed to shortlist ",
+        Get.snackbar("Failed", "Failed to block ",
             backgroundColor: Colors.red, colorText: Colors.white);
       }
     } catch (e) {
-      log("loooog ----- $e");
+      log("Log ------- $e");
     }
   }
-  
-  Future<void> removeShortlistedProfile(interestedPersonId) async {
+
+  Future<void> removeBlockedRequest(blockPersonId) async {
     try {
       final prefs = await SharedPreferences.getInstance();
       final userId = prefs.getString('childId') ?? '';
@@ -55,35 +54,31 @@ class ShortlistController extends GetxController {
         return;
       }
 
-      final url = Uri.parse("${baseUrl}cancel_shortlist");
+      final url = Uri.parse("${baseUrl}unblocked_user/");
       final token = prefs.getString('token');
 
-      final response = await http.post(url, headers: {
-        "token": "$token"
-      }, body: {
-        "user_id": userId,
-        "interest_person_id": interestedPersonId,
-      });
+      final response = await http.post(url,
+          headers: {"token": "$token"},
+          body: {"user_id": userId, "block_person": blockPersonId});
 
       if (response.statusCode == 200) {
         final responseData = json.decode(response.body);
         final msg = responseData["msg"] ?? '';
+
         if (responseData['status'] == 200) {
           Get.snackbar("Success", msg,
               backgroundColor: Colors.green, colorText: Colors.white);
         }
       } else {
-        Get.snackbar("Failed", "Failed to shortlist ",
+        Get.snackbar("Failed", "Failed to unblock ",
             backgroundColor: Colors.red, colorText: Colors.white);
       }
     } catch (e) {
-      log("log ----- $e");
+      log("Log ------ $e");
     }
   }
 
-
-
-  Future<List<ShortlistedModel>> fetchShortlistData() async {
+  Future<List<ShortlistedModel>> fetchBlockedProfileData() async {
     List<ShortlistedModel> interests = [];
 
     try {
@@ -94,9 +89,9 @@ class ShortlistController extends GetxController {
         Get.snackbar("Error", "User ID not found");
       }
 
-      final url = Uri.parse("${baseUrl}interest_shortlist?user_id=$userId");
+      final url = Uri.parse("${baseUrl}blocklist/?user_id=$userId");
 
-      final token = prefs.getString('token'); 
+      final token = prefs.getString('token');
 
       final response = await http.get(url, headers: {"token": "$token"});
 
@@ -112,8 +107,9 @@ class ShortlistController extends GetxController {
         interests = list.map((e) => ShortlistedModel.fromJson(e)).toList();
       } else {}
     } catch (e) {
-      log("Log ----------- $e");
+      log("Log ------ $e");
     }
+
     return interests;
   }
 }

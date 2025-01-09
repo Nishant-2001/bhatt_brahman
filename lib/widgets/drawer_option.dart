@@ -23,10 +23,10 @@ List<Widget> drawerOptions(BuildContext context) {
     {
       "icon": "assets/blocked-profile.png",
       "title": "Blocked Profile",
-      // "onTap": () {
-      //   Navigator.pop(context);
-      //   Get.to(() => const BlockedProfilePage());
-      // },
+      "onTap": () {
+        Navigator.pop(context);
+        Get.to(() => const BlockedProfilePage());
+      },
     },
     {
       "icon": "assets/password.png",

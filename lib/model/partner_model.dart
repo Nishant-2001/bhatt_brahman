@@ -17,7 +17,7 @@ class PartnerModel {
   final String? education;
   final String? age;
   final String? income;
-  final String? workingAt; 
+  final String? workingAt;
   final String? workLocation;
   final String? gotra;
   final String? manglik;
@@ -123,7 +123,7 @@ class PartnerModel {
         workLocation: json['work_location_name'],
         gotra: json['gotra_name'],
         manglik: json['manglik'],
-        raasi: json['raashi_name'],
+        raasi: json['rassi_name'],
         siblings: json['siblings_no'],
         fatherName: json['father_name'],
         motherName: json['mother_name'],

@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -128,7 +129,7 @@ class _FavouritesPageState extends State<FavouritesPage> {
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return const Center(
-                          child: CircularProgressIndicator(),
+                          child: CupertinoActivityIndicator(),
                         );
                       }
 
@@ -158,273 +159,286 @@ class _FavouritesPageState extends State<FavouritesPage> {
                           itemCount: data.length,
                           itemBuilder: (context, index) {
                             final ShortlistedModel profile = data[index];
-                            return GestureDetector(
-                              onTap: () {
-                                Get.to(() =>
-                                    FavouritesDetailPage(profile: profile));
-                              },
-                              child: Container(
-                                width: Get.width,
-                                decoration: BoxDecoration(
-                                    border: Border.all(
-                                        color: const Color(0xff9C9C9C)),
-                                    borderRadius: BorderRadius.circular(7)),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Container(
-                                      width: Get.width,
-                                      height: Get.height * 0.18,
-                                      decoration: BoxDecoration(
-                                          color: Colors.transparent,
-                                          borderRadius:
-                                              BorderRadius.circular(7)),
-                                      child: Image.network(
-                                        profile.profileImg,
+                            return Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 7.0),
+                              child: GestureDetector(
+                                onTap: () {
+                                  Get.to(() =>
+                                      FavouritesDetailPage(profile: profile));
+                                },
+                                child: Container(
+                                  width: Get.width,
+                                  decoration: BoxDecoration(
+                                      border: Border.all(
+                                          color: const Color(0xff9C9C9C)),
+                                      borderRadius: BorderRadius.circular(7)),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Container(
                                         width: Get.width,
-                                        height: Get.height,
+                                        height: Get.height * 0.18,
+                                        decoration: BoxDecoration(
+                                            color: Colors.transparent,
+                                            borderRadius:
+                                                BorderRadius.circular(7)),
+                                        child: Image.network(
+                                          profile.profileImg,
+                                          width: Get.width,
+                                          height: Get.height,
+                                        ),
                                       ),
-                                    ),
-                                    ListTile(
-                                      title: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(
-                                            "${profile.firstName} ${profile.lastName}",
-                                            style: customTextStyle(
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w500),
-                                          ),
-                                          GestureDetector(
-                                            onTap: () {
-                                              shortlistController
-                                                  .removeShortlistedProfile(
-                                                      profile
-                                                          .interestedPersonId);
-                                              setState(() {
-                                                shortlistFuture =
-                                                    shortlistController
-                                                        .fetchShortlistData();
-                                              });
-                                            },
-                                            child: const Text(
-                                              "Remove",
-                                              style: TextStyle(
-                                                fontSize: 10,
-                                                fontWeight: FontWeight.w500,
-                                                color: Color(0xffff00000),
-                                                decoration:
-                                                    TextDecoration.underline,
-                                                decorationColor:
-                                                    Color(0xffff00000),
-                                              ),
+                                      ListTile(
+                                        title: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              "${profile.firstName} ${profile.lastName}",
+                                              style: customTextStyle(
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.w500),
                                             ),
-                                          )
-                                        ],
-                                      ),
-                                      subtitle: Row(
-                                        children: [
-                                          Text(
-                                            "${profile.age} Yrs | ${profile.height} cm",
-                                            style: customTextStyle(
-                                                color: const Color(0xff686D76)),
-                                          ),
-                                          SizedBox(
-                                            width: Get.width * 0.08,
-                                          ),
-                                          Row(
-                                            children: [
-                                              const Icon(
-                                                Icons.work_outline_outlined,
-                                                color: Color(0xffE8461C),
-                                                size: 18,
+                                            GestureDetector(
+                                              onTap: () {
+                                                shortlistController
+                                                    .removeShortlistedProfile(
+                                                        profile
+                                                            .interestedPersonId);
+                                                setState(() {
+                                                  shortlistFuture =
+                                                      shortlistController
+                                                          .fetchShortlistData();
+                                                });
+                                              },
+                                              child: const Text(
+                                                "Remove",
+                                                style: TextStyle(
+                                                  fontSize: 10,
+                                                  fontWeight: FontWeight.w500,
+                                                  color: Color(0xffff00000),
+                                                  decoration:
+                                                      TextDecoration.underline,
+                                                  decorationColor:
+                                                      Color(0xffff00000),
+                                                ),
                                               ),
-                                              width(4),
-                                              Text(
-                                                "${profile.profession.split(" ").first}...",
-                                                style: customTextStyle(
-                                                    fontSize: 10,
-                                                    fontWeight: FontWeight.w600,
-                                                    color: const Color(
-                                                        0xff686D76)),
-                                              )
-                                            ],
-                                          ),
-                                          SizedBox(
-                                            width: Get.width * 0.08,
-                                          ),
-                                          Row(
-                                            children: [
-                                              const Icon(
-                                                Icons.location_on_outlined,
-                                                color: Color(0xffE8461C),
-                                                size: 18,
-                                              ),
-                                              width(4),
-                                              Text(
-                                                "${profile.livesIn.split(" ").first}...",
-                                                style: customTextStyle(
-                                                    fontSize: 10,
-                                                    fontWeight: FontWeight.w600,
-                                                    color: const Color(
-                                                        0xff686D76)),
-                                              )
-                                            ],
-                                          ),
-                                        ],
+                                            )
+                                          ],
+                                        ),
+                                        subtitle: Row(
+                                          children: [
+                                            Text(
+                                              "${profile.age} Yrs | ${profile.height} cm",
+                                              style: customTextStyle(
+                                                  color:
+                                                      const Color(0xff686D76)),
+                                            ),
+                                            SizedBox(
+                                              width: Get.width * 0.08,
+                                            ),
+                                            Row(
+                                              children: [
+                                                const Icon(
+                                                  Icons.work_outline_outlined,
+                                                  color: Color(0xffE8461C),
+                                                  size: 18,
+                                                ),
+                                                width(4),
+                                                Text(
+                                                  "${profile.profession.split(" ").first}...",
+                                                  style: customTextStyle(
+                                                      fontSize: 10,
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                      color: const Color(
+                                                          0xff686D76)),
+                                                )
+                                              ],
+                                            ),
+                                            SizedBox(
+                                              width: Get.width * 0.08,
+                                            ),
+                                            Row(
+                                              children: [
+                                                const Icon(
+                                                  Icons.location_on_outlined,
+                                                  color: Color(0xffE8461C),
+                                                  size: 18,
+                                                ),
+                                                width(4),
+                                                Text(
+                                                  "${profile.livesIn.split(" ").first}...",
+                                                  style: customTextStyle(
+                                                      fontSize: 10,
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                      color: const Color(
+                                                          0xff686D76)),
+                                                )
+                                              ],
+                                            ),
+                                          ],
+                                        ),
                                       ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 18.0),
-                                      child: Text(
-                                        "Avni Rai profile has an ${profile.matchPercentage} with yours.",
-                                        style: customTextStyle(
-                                            fontWeight: FontWeight.w500,
-                                            color: const Color(0xff2C3377)),
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 18.0),
+                                        child: Text(
+                                          "Avni Rai profile has an ${profile.matchPercentage} with yours.",
+                                          style: customTextStyle(
+                                              fontWeight: FontWeight.w500,
+                                              color: const Color(0xff2C3377)),
+                                        ),
                                       ),
-                                    ),
-                                    height(12),
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 16.0, vertical: 12),
-                                      child: Row(
-                                        children: [
-                                          Material(
-                                            child: GestureDetector(
-                                              onTap: () async {
-                                                try {
-                                                  String? contactNumber =
-                                                      profile.parentContact;
-                                                  if (contactNumber != null &&
-                                                      contactNumber
-                                                          .isNotEmpty) {
-                                                    _launchPhoneDialer(
-                                                        contactNumber);
-                                                  } else {
+                                      height(12),
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 16.0, vertical: 12),
+                                        child: Row(
+                                          children: [
+                                            Material(
+                                              child: GestureDetector(
+                                                onTap: () async {
+                                                  try {
+                                                    String? contactNumber =
+                                                        profile.parentContact;
+                                                    if (contactNumber != null &&
+                                                        contactNumber
+                                                            .isNotEmpty) {
+                                                      _launchPhoneDialer(
+                                                          contactNumber);
+                                                    } else {
+                                                      Get.snackbar(
+                                                        "Error",
+                                                        "Contact number not found",
+                                                        snackPosition:
+                                                            SnackPosition
+                                                                .BOTTOM,
+                                                      );
+                                                    }
+                                                  } catch (e) {
+                                                    print(
+                                                        'Error getting contact number: $e');
                                                     Get.snackbar(
                                                       "Error",
-                                                      "Contact number not found",
+                                                      "Failed to get contact number",
                                                       snackPosition:
                                                           SnackPosition.BOTTOM,
                                                     );
                                                   }
-                                                } catch (e) {
-                                                  print(
-                                                      'Error getting contact number: $e');
-                                                  Get.snackbar(
-                                                    "Error",
-                                                    "Failed to get contact number",
-                                                    snackPosition:
-                                                        SnackPosition.BOTTOM,
-                                                  );
-                                                }
-                                              },
-                                              child: Container(
-                                                width: Get.width * 0.4,
-                                                height: Get.height * 0.043,
-                                                alignment: Alignment.center,
-                                                decoration: BoxDecoration(
-                                                    color:
-                                                        const Color(0xffffffff),
-                                                    border: Border.all(
-                                                        color: const Color(
-                                                            0xff2A3171)),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            25)),
-                                                child: Padding(
-                                                  padding: const EdgeInsets
-                                                      .symmetric(
-                                                      vertical: 10.0),
-                                                  child: Text(
-                                                    "Call Now",
-                                                    style: GoogleFonts.sourceSans3(
-                                                        textStyle:
-                                                            const TextStyle(
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w700,
-                                                                fontSize: 12,
-                                                                color: Color(
-                                                                    0xff2A3171))),
-                                                    textAlign: TextAlign.center,
+                                                },
+                                                child: Container(
+                                                  width: Get.width * 0.4,
+                                                  height: Get.height * 0.043,
+                                                  alignment: Alignment.center,
+                                                  decoration: BoxDecoration(
+                                                      color: const Color(
+                                                          0xffffffff),
+                                                      border: Border.all(
+                                                          color: const Color(
+                                                              0xff2A3171)),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              25)),
+                                                  child: Padding(
+                                                    padding: const EdgeInsets
+                                                        .symmetric(
+                                                        vertical: 10.0),
+                                                    child: Text(
+                                                      "Call Now",
+                                                      style: GoogleFonts.sourceSans3(
+                                                          textStyle:
+                                                              const TextStyle(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w700,
+                                                                  fontSize: 12,
+                                                                  color: Color(
+                                                                      0xff2A3171))),
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                    ),
                                                   ),
                                                 ),
                                               ),
                                             ),
-                                          ),
-                                          width(7),
-                                          Material(
-                                            child: GestureDetector(
-                                              onTap: () async {
-                                                String? contactNumber =
-                                                    profile.parentContact;
+                                            width(7),
+                                            Material(
+                                              child: GestureDetector(
+                                                onTap: () async {
+                                                  String? contactNumber =
+                                                      profile.parentContact;
 
-                                                if (contactNumber != null) {
-                                                  String phoneNumber =
-                                                      contactNumber.replaceAll(
-                                                          RegExp(r'\D'), '');
+                                                  if (contactNumber != null) {
+                                                    String phoneNumber =
+                                                        contactNumber
+                                                            .replaceAll(
+                                                                RegExp(r'\D'),
+                                                                '');
 
-                                                  String whatsappUrl =
-                                                      "https://wa.me/+91$phoneNumber";
-                                                  if (await canLaunch(
-                                                      whatsappUrl)) {
-                                                    await launch(whatsappUrl);
+                                                    String whatsappUrl =
+                                                        "https://wa.me/+91$phoneNumber";
+                                                    if (await canLaunch(
+                                                        whatsappUrl)) {
+                                                      await launch(whatsappUrl);
+                                                    } else {
+                                                      Get.snackbar("Error",
+                                                          "Unable to open WhatsApp");
+                                                    }
                                                   } else {
                                                     Get.snackbar("Error",
-                                                        "Unable to open WhatsApp");
+                                                        "Contact number not found");
                                                   }
-                                                } else {
-                                                  Get.snackbar("Error",
-                                                      "Contact number not found");
-                                                }
-                                              },
-                                              child: Container(
-                                                width: Get.width * 0.4,
-                                                height: Get.height * 0.043,
-                                                alignment: Alignment.center,
-                                                decoration: BoxDecoration(
-                                                    gradient:
-                                                        const LinearGradient(
-                                                      colors: [
-                                                        Color(0xff2A3171),
-                                                        Color(0xff4E5CD3)
-                                                      ],
-                                                      begin:
-                                                          Alignment.centerLeft,
-                                                      end:
-                                                          Alignment.centerRight,
+                                                },
+                                                child: Container(
+                                                  width: Get.width * 0.4,
+                                                  height: Get.height * 0.043,
+                                                  alignment: Alignment.center,
+                                                  decoration: BoxDecoration(
+                                                      gradient:
+                                                          const LinearGradient(
+                                                        colors: [
+                                                          Color(0xff2A3171),
+                                                          Color(0xff4E5CD3)
+                                                        ],
+                                                        begin: Alignment
+                                                            .centerLeft,
+                                                        end: Alignment
+                                                            .centerRight,
+                                                      ),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              25)),
+                                                  child: Padding(
+                                                    padding: const EdgeInsets
+                                                        .symmetric(
+                                                        vertical: 10.0),
+                                                    child: Text(
+                                                      "Chat on WhatsApp",
+                                                      style: GoogleFonts.sourceSans3(
+                                                          textStyle:
+                                                              const TextStyle(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w700,
+                                                                  fontSize: 12,
+                                                                  color: Color(
+                                                                      0xffFFFFFF))),
+                                                      textAlign:
+                                                          TextAlign.center,
                                                     ),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            25)),
-                                                child: Padding(
-                                                  padding: const EdgeInsets
-                                                      .symmetric(
-                                                      vertical: 10.0),
-                                                  child: Text(
-                                                    "Chat on WhatsApp",
-                                                    style: GoogleFonts.sourceSans3(
-                                                        textStyle:
-                                                            const TextStyle(
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w700,
-                                                                fontSize: 12,
-                                                                color: Color(
-                                                                    0xffFFFFFF))),
-                                                    textAlign: TextAlign.center,
                                                   ),
                                                 ),
                                               ),
                                             ),
-                                          ),
-                                        ],
-                                      ),
-                                    )
-                                  ],
+                                          ],
+                                        ),
+                                      )
+                                    ],
+                                  ),
                                 ),
                               ),
                             );

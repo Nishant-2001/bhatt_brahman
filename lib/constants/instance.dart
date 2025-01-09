@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 
 import '../controller/accept_request_controller.dart';
+import '../controller/block_profile_controller.dart';
 import '../controller/cancel_request_controller.dart';
 import '../controller/change_password_controller.dart';
 import '../controller/dropdown_controller.dart';
@@ -14,6 +15,7 @@ import '../controller/not_interested_person_controller.dart';
 import '../controller/otp_verification_controller.dart';
 import '../controller/prefferences_controller.dart';
 import '../controller/recommended_controller.dart';
+import '../controller/report_controller.dart';
 import '../controller/search_controller.dart';
 import '../controller/shortlist_controller.dart';
 import '../controller/sign_in_controller.dart';
@@ -78,3 +80,8 @@ final ViewProfileController viewProfileController =
     Get.put(ViewProfileController());
 
 final ShortlistController shortlistController = Get.put(ShortlistController());
+
+final BlockProfileController blockProfileController =
+    Get.put(BlockProfileController());
+
+final ReportController reportController = Get.put(ReportController());

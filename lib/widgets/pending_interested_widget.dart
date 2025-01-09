@@ -8,13 +8,24 @@ import '../../controller/interest_pending_controller.dart';
 import '../constants/instance.dart';
 import '../views/pages/pending_request_detail_page.dart';
 
-class PendingInterestedWidget extends StatelessWidget {
+class PendingInterestedWidget extends StatefulWidget {
   PendingInterestedWidget({super.key}) {
-    controller.fetchInterestPendingList();
+    
   }
 
+  @override
+  State<PendingInterestedWidget> createState() => _PendingInterestedWidgetState();
+}
+
+class _PendingInterestedWidgetState extends State<PendingInterestedWidget> {
   final InterestPendingController controller =
       Get.put(InterestPendingController());
+
+      @override
+  void initState() {
+     super.initState(); 
+    controller.fetchInterestPendingList();
+  }
 
   @override
   Widget build(BuildContext context) {

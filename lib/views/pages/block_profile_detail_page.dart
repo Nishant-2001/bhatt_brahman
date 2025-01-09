@@ -4,52 +4,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../../constants/app_constant.dart';
 import '../../constants/dimensions.dart';
 import '../../constants/text_style.dart';
 
-class FavouritesDetailPage extends StatelessWidget {
+class BlockProfileDetailPage extends StatelessWidget {
   final ShortlistedModel profile;
-  const FavouritesDetailPage({super.key, required this.profile});
-
-  void _launchPhoneDialer(String phoneNumber) async {
-    String cleanNumber = phoneNumber.replaceAll(RegExp(r'[\s()\-]'), '');
-
-    if (cleanNumber.contains('(') || cleanNumber.contains(')')) {
-      cleanNumber = cleanNumber.replaceAll(RegExp(r'[()]'), '');
-    }
-
-    if (!cleanNumber.startsWith('+')) {
-      cleanNumber = '+91$cleanNumber';
-    }
-
-    final Uri telUri = Uri.parse('tel:$cleanNumber');
-
-    try {
-      if (await canLaunchUrl(telUri)) {
-        await launchUrl(
-          telUri,
-          mode: LaunchMode.platformDefault,
-        );
-      } else {
-        print('Cannot launch URL: $telUri');
-        Get.snackbar(
-          "Error",
-          "Unable to open phone dialer",
-          snackPosition: SnackPosition.BOTTOM,
-        );
-      }
-    } catch (e) {
-      print('Error launching phone dialer: $e');
-      Get.snackbar(
-        "Error",
-        "Failed to launch phone dialer",
-        snackPosition: SnackPosition.BOTTOM,
-      );
-    }
-  }
+  const BlockProfileDetailPage({super.key, required this.profile});
 
   Future<void> showConfirmation(context) async {
     return showDialog(
@@ -222,11 +184,12 @@ class FavouritesDetailPage extends StatelessWidget {
             itemBuilder: (context) => [
               PopupMenuItem(
                 child: Text(
-                  'Block',
+                  'Unblock',
                   style: customTextStyle(fontWeight: FontWeight.w500),
                 ),
                 onTap: () {
-                  blockProfileController.sendBlockRequest(profile.id);
+                  blockProfileController
+                      .removeBlockedRequest(profile.blockPersonId);
                 },
               ),
               PopupMenuItem(
@@ -281,13 +244,16 @@ class FavouritesDetailPage extends StatelessWidget {
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(20),
                           child: Image.network(
-                            profile.profileImg,
+                            profile.profileImg ??
+                                (profile.userType == 'groom'
+                                    ? 'assets/groom.jpg'
+                                    : 'assets/bride.jpg'),
                             fit: BoxFit.contain,
                             errorBuilder: (context, error, stackTrace) {
                               return Image.asset(
                                 profile.userType == 'groom'
-                                    ? 'assets/groom.jpg'
-                                    : 'assets/bride.jpg',
+                                    ? 'assets/bride.jpg'
+                                    : 'assets/groom.jpg',
                                 fit: BoxFit.contain,
                               );
                             },
@@ -305,118 +271,9 @@ class FavouritesDetailPage extends StatelessWidget {
                           ),
                         ],
                       ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              GestureDetector(
-                                onTap: () async {
-                                  try {
-                                    String? contactNumber =
-                                        profile.parentContact;
-                                    if (contactNumber != null &&
-                                        contactNumber.isNotEmpty) {
-                                      _launchPhoneDialer(contactNumber);
-                                    } else {
-                                      Get.snackbar(
-                                        "Error",
-                                        "Contact number not found",
-                                        snackPosition: SnackPosition.BOTTOM,
-                                      );
-                                    }
-                                  } catch (e) {
-                                    print('Error getting contact number: $e');
-                                    Get.snackbar(
-                                      "Error",
-                                      "Failed to get contact number",
-                                      snackPosition: SnackPosition.BOTTOM,
-                                    );
-                                  }
-                                },
-                                child: Container(
-                                  height: Get.height * 0.08,
-                                  width: Get.width * 0.14,
-                                  decoration: const BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    gradient: LinearGradient(
-                                      colors: [
-                                        Color(0xff2A3171),
-                                        Color(0xff4E5CD3)
-                                      ],
-                                      begin: Alignment.centerLeft,
-                                      end: Alignment.centerRight,
-                                    ),
-                                  ),
-                                  child: Icon(
-                                    Icons.call_outlined,
-                                    color: Colors.white,
-                                    size: 30,
-                                  ),
-                                ),
-                              ),
-                              SizedBox(
-                                width: Get.width * 0.2,
-                              ),
-                              GestureDetector(
-                                onTap: () async {
-                                  String? contactNumber = profile.parentContact;
-
-                                  if (contactNumber != null) {
-                                    String phoneNumber = contactNumber
-                                        .replaceAll(RegExp(r'\D'), '');
-
-                                    String whatsappUrl =
-                                        "https://wa.me/+91$phoneNumber";
-                                    if (await canLaunch(whatsappUrl)) {
-                                      await launch(whatsappUrl);
-                                    } else {
-                                      Get.snackbar(
-                                          "Error", "Unable to open WhatsApp");
-                                    }
-                                  } else {
-                                    Get.snackbar(
-                                        "Error", "Contact number not found");
-                                  }
-                                },
-                                child: Container(
-                                  height: Get.height * 0.08,
-                                  width: Get.width * 0.14,
-                                  decoration: const BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    gradient: LinearGradient(
-                                      colors: [
-                                        Color(0xff2A3171),
-                                        Color(0xff4E5CD3)
-                                      ],
-                                      begin: Alignment.centerLeft,
-                                      end: Alignment.centerRight,
-                                    ),
-                                  ),
-                                  child: Padding(
-                                    padding: EdgeInsets.all(Get.width * 0.028),
-                                    child: Image.asset(
-                                      "assets/chat3.png",
-                                      fit: BoxFit.contain,
-                                    ),
-                                  ),
-                                ),
-                              )
-                            ],
-                          ),
-                          height(Get.height * 0.01),
-                          Text(
-                            "Call or Chat to know more about ${profile.firstName} ${profile.lastName}.",
-                            style: customTextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500,
-                                color: const Color(0xffEB4E25)),
-                            textAlign: TextAlign.center,
-                          )
-                        ],
-                      ),
-                      height(15),
+                      height(20),
+                      const Divider(),
+                      height(20),
                       Text(
                         "About :-",
                         style: customTextStyle(
@@ -648,8 +505,8 @@ class FavouritesDetailPage extends StatelessWidget {
                       Material(
                         child: GestureDetector(
                           onTap: () {
-                            shortlistController.removeShortlistedProfile(
-                                profile.interestedPersonId);
+                            blockProfileController
+                                .removeBlockedRequest(profile.blockPersonId);
                           },
                           child: Container(
                             width: Get.width,
@@ -669,7 +526,7 @@ class FavouritesDetailPage extends StatelessWidget {
                               padding:
                                   const EdgeInsets.symmetric(vertical: 10.0),
                               child: Text(
-                                "Remove",
+                                "Unblock",
                                 style: GoogleFonts.sourceSans3(
                                     textStyle: const TextStyle(
                                         fontWeight: FontWeight.w700,
