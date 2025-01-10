@@ -1,11 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-
 import 'views/home/splash_screen.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
 
-   WidgetsFlutterBinding.ensureInitialized();
+   await SystemChrome.setEnabledSystemUIMode(
+    SystemUiMode.manual,
+    overlays: SystemUiOverlay.values,
+  );
+
+   await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+  ]);
+
+  const platform = MethodChannel('app_channel');
+  try {
+    await platform.invokeMethod('setSecureScreen');
+  } catch (e) {
+    print('Secure screen setting error: $e');
+  }
+
   runApp(const MyApp());
 }
 
