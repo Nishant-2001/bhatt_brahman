@@ -76,7 +76,7 @@ class WelcomeScreen extends StatelessWidget {
                     child: TextButton(
                       onPressed: () {
                         updateSelectedButton("Sign In");
-                        // Add navigation logic here
+                        
                         Get.off(() => const SignInPage());
                       },
                       child: Text(
@@ -111,7 +111,7 @@ class WelcomeScreen extends StatelessWidget {
                     child: TextButton(
                       onPressed: () {
                         updateSelectedButton("Sign Up");
-                        // Add navigation logic here
+                        
                         Get.to(() => const SignUpPage());
                       },
                       child: Text(

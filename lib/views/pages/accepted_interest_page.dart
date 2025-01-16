@@ -8,6 +8,7 @@ import '../../constants/text_style.dart';
 import '../../widgets/accepted_interest_widget.dart';
 import '../../widgets/pending_interested_widget.dart';
 import '../../widgets/rejected_interest_widget.dart';
+import 'notification_page.dart';
 
 class AcceptedInterestPage extends StatefulWidget {
   const AcceptedInterestPage({super.key});
@@ -38,17 +39,22 @@ class _AcceptedInterestPageState extends State<AcceptedInterestPage> {
           ),
           centerTitle: true,
           actions: [
-            IconButton(
-              onPressed: () {},
-              icon: Image.asset(
-                'assets/Vector.png',
-                height: 24,
-                width: 24,
+            // IconButton(
+            //   onPressed: () {},
+            //   icon: Image.asset(
+            //     'assets/Vector.png',
+            //     height: 24,
+            //     width: 24,
+            //   ),
+            // ),
+            GestureDetector(
+              onTap: () {
+                Get.to(() => const NotificationPage());
+              },
+              child: const Icon(
+                Icons.notifications_outlined,
+                size: 28,
               ),
-            ),
-            const Icon(
-              Icons.notifications_outlined,
-              size: 28,
             ),
             width(15),
           ],

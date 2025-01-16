@@ -12,6 +12,7 @@ import '../controller/forgot_new_password_controller.dart';
 import '../controller/forgot_password_controller.dart';
 import '../controller/interested_person_controller.dart';
 import '../controller/not_interested_person_controller.dart';
+import '../controller/notification_controller.dart';
 import '../controller/otp_verification_controller.dart';
 import '../controller/prefferences_controller.dart';
 import '../controller/recommended_controller.dart';
@@ -85,3 +86,6 @@ final BlockProfileController blockProfileController =
     Get.put(BlockProfileController());
 
 final ReportController reportController = Get.put(ReportController());
+
+final NotificationController notificationController =
+    Get.put(NotificationController());

@@ -1,3 +1,4 @@
+import 'package:bhatt_brahman_var_vadhu/constants/dimensions.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../constants/instance.dart';
@@ -91,7 +92,6 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget getPage(int index) {
-    
     switch (index) {
       case 0:
         return const HomeTabPage();
@@ -110,91 +110,85 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: getPage(_currentIndex),
-      bottomNavigationBar: ClipRRect(
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(20),
-          topRight: Radius.circular(20),
+      bottomNavigationBar: Container(
+        height: Get.height * 0.065,
+        decoration: const BoxDecoration(
+          color: Color(0xffE4E4E4),
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(20),
+            topRight: Radius.circular(20),
+          ),
         ),
-        child: BottomNavigationBar(
-          type: BottomNavigationBarType.fixed,
-          backgroundColor: const Color(0xffE4E4E4),
-          selectedItemColor: const Color(0xff2A3171),
-          unselectedItemColor: const Color(0xff2A3171),
-          selectedLabelStyle: TextStyle(
-            fontFamily: "Work Sans",
-            fontSize: Get.width * 0.03,
-            fontWeight: FontWeight.w600,
-          ),
-          unselectedLabelStyle: TextStyle(
-            fontFamily: "Work Sans",
-            fontSize: Get.width * 0.03,
-            fontWeight: FontWeight.w600,
-          ),
-          showSelectedLabels: true,
-          showUnselectedLabels: true,
-          currentIndex: _currentIndex,
-          onTap: (index) async {
-            if (index == 0) {
-              setState(() {
-                _currentIndex = index;
-              });
-            } else if (index == 3) {
-              await handleVerification(index);
-            } else {
-              await handleVerificationStatus(index);
-            }
-          },
-          items: [
-            _buildBottomNavigationBarItem('Home', Icons.home_outlined, 0),
-            _buildBottomNavigationBarItem('Search', Icons.search_outlined, 1),
-            _buildBottomNavigationBarItem(
-                'Shortlisted', Icons.favorite_outline, 2),
-            _buildBottomNavigationBarItem('Profile', Icons.person_outline, 3),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            _buildNavItem('Home', Icons.home_outlined, 0),
+            _buildNavItem('Search', Icons.search_outlined, 1),
+            _buildNavItem('Shortlisted', Icons.favorite_outline, 2),
+            _buildNavItem('Profile', Icons.person_outline, 3),
           ],
         ),
       ),
     );
   }
 
-  BottomNavigationBarItem _buildBottomNavigationBarItem(
-      String label, IconData icon, int index) {
-    return BottomNavigationBarItem(
-      icon: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(
-            icon,
-            size: Get.width * 0.065,
-            color: _currentIndex == index
-                ? const Color(0xff2A3171)
-                : const Color(0xff2A3171),
-          ),
-          SizedBox(height: Get.height * 0.005),
-          Text(
-            label,
-            style: TextStyle(
-              fontFamily: "Work Sans",
-              fontSize: Get.width * 0.028,
-              fontWeight: FontWeight.w600,
-              color: _currentIndex == index
-                  ? const Color(0xff2A3171)
-                  : const Color(0xff2A3171),
-            ),
-          ),
-          SizedBox(height: Get.height * 0.005),
-          _currentIndex == index
-              ? Container(
-                  height: Get.height * 0.01,
-                  width: Get.width * 0.1,
-                  decoration: BoxDecoration(
+  Widget _buildNavItem(String label, IconData icon, int index) {
+    return GestureDetector(
+      onTap: () async {
+        if (index == 0) {
+          setState(() {
+            _currentIndex = index;
+          });
+        } else if (index == 3) {
+          await handleVerification(index);
+        } else {
+          await handleVerificationStatus(index);
+        }
+      },
+      child: SizedBox(
+        width: Get.width * 0.22,
+        child: Stack(
+          alignment: Alignment.topCenter,
+          children: [
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox(height: Get.height * 0.008),
+                Icon(
+                  icon,
+                  size: Get.width * 0.065,
+                  color: const Color(0xff2A3171),
+                ),
+                Text(
+                  label,
+                  style: TextStyle(
+                    fontFamily: "Work Sans",
+                    fontSize: Get.width * 0.028,
+                    fontWeight: FontWeight.w600,
                     color: const Color(0xff2A3171),
-                    borderRadius: BorderRadius.circular(2),
                   ),
-                )
-              : const SizedBox(),
-        ],
+                ),
+                height(Get.height * 0.008)
+              ],
+            ),
+            if (_currentIndex == index)
+              Positioned(
+                bottom: 0,
+                child: Container(
+                  height: Get.height * 0.005,
+                  width: Get.width * 0.1,
+                  decoration: const BoxDecoration(
+                    color: Color(0xff2A3171),
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(2),
+                      topRight: Radius.circular(2),
+                    ),
+                  ),
+                ),
+              ),
+          ],
+        ),
       ),
-      label: '',
     );
   }
 }

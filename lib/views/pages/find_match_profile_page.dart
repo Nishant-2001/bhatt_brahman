@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -92,6 +91,7 @@ class _FindMatchProfilePageState extends State<FindMatchProfilePage> {
   }
 
   void showReportDialog(BuildContext context) {
+    final formKey = GlobalKey<FormState>();
     showDialog(
       context: context,
       builder: (context) {
@@ -103,61 +103,72 @@ class _FindMatchProfilePageState extends State<FindMatchProfilePage> {
             width: Get.width * 0.9,
             child: Padding(
               padding: const EdgeInsets.all(16.0),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "Report",
-                    style: customTextStyle(
-                        fontSize: 16, fontWeight: FontWeight.w500),
-                  ),
-                  height(Get.height * 0.03),
-                  TextFormField(
-                    controller: reportController.descriptionController,
-                    decoration: InputDecoration(
-                        hintText: "Enter Description...",
-                        hintStyle: customTextStyle(
-                            fontSize: 14, fontWeight: FontWeight.w400),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        )),
-                    maxLines: 6,
-                  ),
-                  height(Get.height * 0.03),
-                  Material(
-                    child: GestureDetector(
-                      onTap: () {
-                        Navigator.of(context).pop();
-                        showConfirmation(context);
+              child: Form(
+                key: formKey,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Report",
+                      style: customTextStyle(
+                          fontSize: 16, fontWeight: FontWeight.w500),
+                    ),
+                    height(Get.height * 0.03),
+                    TextFormField(
+                      controller: reportController.descriptionController,
+                      decoration: InputDecoration(
+                          hintText: "Enter Description...",
+                          hintStyle: customTextStyle(
+                              fontSize: 14, fontWeight: FontWeight.w400),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          )),
+                      maxLines: 6,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Enter report description";
+                        }
+                        return null;
                       },
-                      child: Container(
-                        width: Get.width,
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                            color: const Color(0xffffffff),
-                            gradient: const LinearGradient(
-                              colors: [Color(0xff2A3171), Color(0xff4E5CD3)],
-                              begin: Alignment.centerLeft,
-                              end: Alignment.centerRight,
+                    ),
+                    height(Get.height * 0.03),
+                    Material(
+                      child: GestureDetector(
+                        onTap: () {
+                          if (formKey.currentState!.validate()) {
+                            Navigator.of(context).pop();
+                            showConfirmation(context);
+                          }
+                        },
+                        child: Container(
+                          width: Get.width,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                              color: const Color(0xffffffff),
+                              gradient: const LinearGradient(
+                                colors: [Color(0xff2A3171), Color(0xff4E5CD3)],
+                                begin: Alignment.centerLeft,
+                                end: Alignment.centerRight,
+                              ),
+                              borderRadius: BorderRadius.circular(25)),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 7.0),
+                            child: Text(
+                              "Submit",
+                              style: GoogleFonts.sourceSans3(
+                                  textStyle: const TextStyle(
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: 16,
+                                      color: Color(0xffffffff))),
+                              textAlign: TextAlign.center,
                             ),
-                            borderRadius: BorderRadius.circular(25)),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 7.0),
-                          child: Text(
-                            "Submit",
-                            style: GoogleFonts.sourceSans3(
-                                textStyle: const TextStyle(
-                                    fontWeight: FontWeight.w700,
-                                    fontSize: 16,
-                                    color: Color(0xffffffff))),
-                            textAlign: TextAlign.center,
                           ),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
@@ -286,7 +297,7 @@ class _FindMatchProfilePageState extends State<FindMatchProfilePage> {
                         const Divider(),
                         height(15),
                         Text(
-                          "${partner.firstName} ${partner.lastName} profile has an ${partner.matchPercentage} with yours.",
+                          "${partner.firstName} ${partner.lastName} profile has an ${partner.matchPercentage} compatibility match with yours.",
                           style: customTextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.w500,
@@ -347,7 +358,9 @@ class _FindMatchProfilePageState extends State<FindMatchProfilePage> {
                                 buildRow("Date of Birth :", partner.dob),
                                 buildRow("Age (yrs) :",
                                     "${partner.age ?? 'Not available'} ${partner.age != null ? '' : ''}"),
-                                buildRow("Height (cm) :", "${partner.height}"),
+                                buildRow("Birth Time :", "${partner.birthTime}"),
+                                buildRow("Birth Place :", "${partner.birthPlace}"),
+                                buildRow("Height (cm) :", partner.height),
                                 buildRow("Weight (kg) :", "${partner.weight}"),
                                 buildRow(
                                     "Blood Group :", "${partner.bloodGroup} "),
@@ -502,25 +515,23 @@ class _FindMatchProfilePageState extends State<FindMatchProfilePage> {
                               children: [
                                 buildRow(
                                   "Preferred Age :",
-                                  "${partner.preferMinAge} - ${partner.preferMaxAge} yrs" ??
-                                      "",
+                                  "${partner.preferMinAge} - ${partner.preferMaxAge} yrs",
                                 ),
                                 buildRow(
                                     "Preferred Height :",
-                                    "${partner.preferMinHeight} - ${partner.preferMaxHeight}" ??
-                                        ""),
+                                    "${partner.preferMinHeight} - ${partner.preferMaxHeight}"),
                                 buildRow("Preferred Body Type :",
-                                    "${partner.preferedBodyType}" ?? ""),
+                                    "${partner.preferedBodyType}"),
                                 buildRow("Preferred Skin Complextion :",
-                                    "${partner.preferComplexion}" ?? ""),
+                                    "${partner.preferComplexion}"),
                                 buildRow("Preferred Marital Status :",
-                                    "${partner.preferMaritalStatus}" ?? ""),
+                                    "${partner.preferMaritalStatus}"),
                                 buildRow("Preferred Education :",
-                                    "${partner.preferEducation}" ?? ""),
+                                    "${partner.preferEducation}"),
                                 buildRow("Preferred Profession :",
-                                    "${partner.preferProfession}" ?? ""),
+                                    "${partner.preferProfession}"),
                                 buildRow("Preferred Location :",
-                                    "${partner.preferLivesIn}" ?? ""),
+                                    "${partner.preferLivesIn}"),
                               ],
                             ),
                           ),

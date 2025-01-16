@@ -43,6 +43,8 @@ class InterestPendingModel {
   final String? preferMinAge;
   final String? preferMaxAge;
   final String? matchPercentage;
+  final String? birthTime;
+  final String? birthPlace;
 
   InterestPendingModel( {required this.id,
       required this.parentId,
@@ -87,7 +89,10 @@ class InterestPendingModel {
       this.preferMaxHeight,
       this.preferMinAge,
       this.preferMaxAge,
-      this.matchPercentage});
+      this.matchPercentage,
+      this.birthTime,
+      this.birthPlace,
+      });
 
   factory InterestPendingModel.fromJson(Map<String, dynamic> json) {
     return InterestPendingModel(
@@ -134,7 +139,10 @@ class InterestPendingModel {
         preferMaxHeight: json['preference_max_height'],
         preferMinAge: json['preference_min_age'],
         preferMaxAge: json['preference_max_age'],
-        matchPercentage: json['match_percentage']);
+        matchPercentage: json['match_percentage'],
+        birthPlace: json['birth_place'],
+        birthTime: json['birth_time'],
+      );
     
   }
 }

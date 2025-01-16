@@ -58,16 +58,20 @@ class _EditProfileFirstLastNameWidgetState
                       return const Center(child: Text('No location available'));
                     }
 
-                    var locationList = snapshot.data!.locationList;
-                    // var selectedValue =
-                    //     editProfileController.selectedNativePlace;
+                    // Filter out 'Any' and 'Other'
+                    var locationList = snapshot.data!.locationList
+                        .where((location) =>
+                            location.name != 'Any' && location.name != 'Other')
+                        .toList();
 
-                    LocationModel? selectedNativePlace = editProfileController
-                                .selectedNativePlace !=
-                            null
-                        ? locationList.firstWhere((p) =>
-                            p.id == editProfileController.selectedNativePlace)
-                        : null;
+                    LocationModel? selectedNativePlace =
+                        editProfileController.selectedNativePlace != null
+                            ? locationList.firstWhere(
+                                (p) =>
+                                    p.id ==
+                                    editProfileController.selectedNativePlace,
+                              )
+                            : null;
 
                     return DropdownSearch<LocationModel>(
                       selectedItem: selectedNativePlace,
@@ -98,10 +102,12 @@ class _EditProfileFirstLastNameWidgetState
                         constraints: BoxConstraints(maxHeight: 350),
                       ),
                       dropdownDecoratorProps: DropDownDecoratorProps(
-                          dropdownSearchDecoration: InputDecoration(
-                              border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ))),
+                        dropdownSearchDecoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                      ),
                       dropdownButtonProps: const DropdownButtonProps(
                         color: Color(0xff9C9C9C),
                       ),
@@ -143,13 +149,19 @@ class _EditProfileFirstLastNameWidgetState
                       return const Center(child: Text('No location available'));
                     }
 
-                    var locationList = snapshot.data!.locationList;
-                    // var selectedValue = editProfileController.selectedLivesIn;
+                    // Filter out 'Any' and 'Other'
+                    var locationList = snapshot.data!.locationList
+                        .where((location) =>
+                            location.name != 'Any' && location.name != 'Other')
+                        .toList();
 
                     LocationModel? selectedLivesIn =
                         editProfileController.selectedLivesIn != null
-                            ? locationList.firstWhere((p) =>
-                                p.id == editProfileController.selectedLivesIn)
+                            ? locationList.firstWhere(
+                                (p) =>
+                                    p.id ==
+                                    editProfileController.selectedLivesIn,
+                              )
                             : null;
 
                     return DropdownSearch<LocationModel>(
@@ -180,10 +192,12 @@ class _EditProfileFirstLastNameWidgetState
                         constraints: BoxConstraints(maxHeight: 350),
                       ),
                       dropdownDecoratorProps: DropDownDecoratorProps(
-                          dropdownSearchDecoration: InputDecoration(
-                              border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ))),
+                        dropdownSearchDecoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                      ),
                       dropdownButtonProps: const DropdownButtonProps(
                         color: Color(0xff9C9C9C),
                       ),

@@ -231,8 +231,12 @@ class _ProfilePageState extends State<ProfilePage> {
                                             profile.contact ?? ""),
                                         buildRow("Date of Birth :",
                                             profile.dob ?? ""),
-                                        buildRow("Age :",
-                                            profile.age.toString() ?? ''),
+                                        buildRow("Age (in yrs) :",
+                                            profile.age.toString()),
+                                        buildRow("Birth Time :",
+                                            "${profile.birthTime}"),
+                                        buildRow("Birth Place :",
+                                            "${profile.birthPlace}"),
                                         buildRow("Height (in cm) :",
                                             profile.height ?? ""),
                                         buildRow("Weight (in kg) :",
@@ -412,14 +416,10 @@ class _ProfilePageState extends State<ProfilePage> {
                                       defaultVerticalAlignment:
                                           TableCellVerticalAlignment.middle,
                                       children: [
-                                        buildRow(
-                                            "Preferred Groom’s Age :",
-                                            '${preferencesData?.minAge} - ${preferencesData?.maxAge}' ??
-                                                ''),
-                                        buildRow(
-                                            "Preferred Groom’s Height :",
-                                            "${preferencesData?.minHeight} - ${preferencesData?.maxHeight}" ??
-                                                ''),
+                                        buildRow("Preferred Groom’s Age :",
+                                            '${preferencesData?.minAge} - ${preferencesData?.maxAge}'),
+                                        buildRow("Preferred Groom’s Height :",
+                                            "${preferencesData?.minHeight} - ${preferencesData?.maxHeight}"),
                                         buildRow("Preferred Body Type :",
                                             preferencesData?.bodyType ?? ''),
                                         buildRow(
@@ -448,7 +448,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               await _launchURL(deleteUrl);
                             } catch (e) {
                               Get.snackbar(
-                                "Error",
+                                "Failed",
                                 "Failed to open the URL",
                                 backgroundColor: Colors.red,
                                 colorText: Colors.white,

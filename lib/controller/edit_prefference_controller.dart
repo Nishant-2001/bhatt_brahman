@@ -10,7 +10,6 @@ import '../constants/api_endpoints.dart';
 import '../constants/instance.dart';
 import '../model/prefferences_model.dart';
 import '../views/home/home_page.dart';
-import '../views/pages/profile_page.dart';
 
 class EditPrefferenceController {
   TextEditingController preferMinAgeController = TextEditingController();
@@ -134,7 +133,6 @@ class EditPrefferenceController {
           preferMinHeightController.clear();
           preferMaxHeightController.clear();
 
-          
           selectedMaritalStatus = null;
           selectedMaritalStatusId = null;
           selectedBodyType = null;

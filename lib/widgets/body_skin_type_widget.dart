@@ -30,7 +30,7 @@ class _BodySkinTypeWidgetState extends State<BodySkinTypeWidget> {
   Widget build(BuildContext context) {
     return SizedBox(
       width: Get.width,
-      height: Get.height * 0.1,
+      height: Get.height * 0.08,
       child: Row(
         children: [
           Expanded(

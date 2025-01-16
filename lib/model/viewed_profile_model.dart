@@ -66,6 +66,8 @@ class Profile {
   final String preferEducation;
   final String preferProfession;
   final String preferLivesIn;
+  final String birthTime;
+  final String birthPlace;
 
   Profile({
     required this.id,
@@ -118,6 +120,8 @@ class Profile {
     required this.preferEducation,
     required this.preferProfession,
     required this.preferLivesIn,
+    required this.birthPlace,
+    required this.birthTime,
   });
 
   factory Profile.fromJson(Map<String, dynamic> json) {
@@ -172,6 +176,8 @@ class Profile {
       preferEducation: json['preference_education_name'] ?? "",
       preferProfession: json['preference_profession_name'] ?? "",
       preferLivesIn: json['preference_lives_in_name'] ?? "",
+      birthPlace: json['birth_place'] ?? "",
+      birthTime: json['birth_time'] ?? "",
     );
   }
 }

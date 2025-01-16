@@ -4,7 +4,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../constants/dimensions.dart';
-import '../constants/instance.dart';
 import '../constants/text_style.dart';
 import '../controller/interest_accepted_controller.dart';
 import 'accepted_interest_detail_page.dart';
@@ -131,8 +130,7 @@ class AcceptedInterestWidget extends StatelessWidget {
                                       ),
                                       width(5),
                                       Text(
-                                        "${item.professionName?.split(" ").first}..." ??
-                                            '',
+                                        "${item.professionName?.split(" ").first}...",
                                         style: customTextStyle(
                                             fontSize: 10,
                                             fontWeight: FontWeight.w600,
@@ -151,8 +149,7 @@ class AcceptedInterestWidget extends StatelessWidget {
                                       ),
                                       width(5),
                                       Text(
-                                        "${item.livesInName?.split(" ").first}..." ??
-                                            '',
+                                        "${item.livesInName?.split(" ").first}...",
                                         style: customTextStyle(
                                             fontSize: 10,
                                             fontWeight: FontWeight.w600,

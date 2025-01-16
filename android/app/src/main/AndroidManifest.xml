@@ -3,6 +3,13 @@
         <uses-permission android:name="android.permission.INTERNET"/>
         <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
         <uses-permission android:name="android.permission.CALL_PHONE" />
+        <uses-permission android:name="android.permission.WAKE_LOCK"/>
+        <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+        <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+        <uses-permission android:name="android.permission.VIBRATE"/>
+
+        <!-- Required for Android 13 and above -->
+        <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
     <application
         android:label="Bhatt Brahman Var Vadhu"
         android:name="${applicationName}"
@@ -37,6 +44,38 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+
+             <!-- for notification channel -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_channel_id"
+            android:value="bbvv" />
+
+             <!-- Firebase Messaging Service -->
+
+        <receiver android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationBootReceiver"
+                android:exported="true">
+                <intent-filter>
+                    <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                </intent-filter>
+        </receiver>
+
+        <service
+            android:name="com.google.firebase.messaging.FirebaseMessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+         </service>
+
+          <!-- new -->
+        <service
+            android:name="com.google.firebase.messaging.FirebaseMessagingService"
+                android:exported="false">
+                <intent-filter>
+                    <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+                </intent-filter>
+        </service>
+
         <meta-data
             android:name="io.flutter.app.android.enableImpeller"
             android:value="false" />

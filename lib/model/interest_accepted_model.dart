@@ -52,6 +52,8 @@ class InterestAcceptedModel {
   final String? gotra;
   final String? raasi;
   final String? fathersName;
+  final String? birthTime;
+  final String? birthPlace;
 
   InterestAcceptedModel({
     this.id,
@@ -107,6 +109,8 @@ class InterestAcceptedModel {
     this.gotra,
     this.raasi,
     this.fathersName,
+    this.birthTime,
+    this.birthPlace,
   });
 
   factory InterestAcceptedModel.fromJson(Map<String, dynamic> json) {
@@ -158,6 +162,8 @@ class InterestAcceptedModel {
       preferEducation: json['preference_education_name'],
       preferProfession: json['preference_profession_name'],
       preferlivesIn: json['preference_lives_in_name'],
+      birthTime: json['birth_time'],
+      birthPlace: json['birth_place'],
     );
   }
 }

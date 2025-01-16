@@ -1,6 +1,5 @@
-import 'package:Bhatt_Brahman_Var_Vadhu/constants/instance.dart';
-import 'package:Bhatt_Brahman_Var_Vadhu/model/Shortlisted_model.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:bhatt_brahman_var_vadhu/constants/instance.dart';
+import 'package:bhatt_brahman_var_vadhu/model/Shortlisted_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -121,6 +120,7 @@ class FavouritesDetailPage extends StatelessWidget {
   }
 
   void showReportDialog(BuildContext context) {
+    final _formKey = GlobalKey<FormState>();
     showDialog(
       context: context,
       builder: (context) {
@@ -132,61 +132,72 @@ class FavouritesDetailPage extends StatelessWidget {
             width: Get.width * 0.9,
             child: Padding(
               padding: const EdgeInsets.all(16.0),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "Report",
-                    style: customTextStyle(
-                        fontSize: 16, fontWeight: FontWeight.w500),
-                  ),
-                  height(Get.height * 0.03),
-                  TextFormField(
-                    controller: reportController.descriptionController,
-                    decoration: InputDecoration(
-                        hintText: "Enter Description...",
-                        hintStyle: customTextStyle(
-                            fontSize: 14, fontWeight: FontWeight.w400),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        )),
-                    maxLines: 6,
-                  ),
-                  height(Get.height * 0.03),
-                  Material(
-                    child: GestureDetector(
-                      onTap: () {
-                        Navigator.of(context).pop();
-                        showConfirmation(context);
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Report",
+                      style: customTextStyle(
+                          fontSize: 16, fontWeight: FontWeight.w500),
+                    ),
+                    height(Get.height * 0.03),
+                    TextFormField(
+                      controller: reportController.descriptionController,
+                      decoration: InputDecoration(
+                          hintText: "Enter Description...",
+                          hintStyle: customTextStyle(
+                              fontSize: 14, fontWeight: FontWeight.w400),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          )),
+                      maxLines: 6,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Enter report description";
+                        }
+                        return null;
                       },
-                      child: Container(
-                        width: Get.width,
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                            color: const Color(0xffffffff),
-                            gradient: const LinearGradient(
-                              colors: [Color(0xff2A3171), Color(0xff4E5CD3)],
-                              begin: Alignment.centerLeft,
-                              end: Alignment.centerRight,
+                    ),
+                    height(Get.height * 0.03),
+                    Material(
+                      child: GestureDetector(
+                        onTap: () {
+                          if (_formKey.currentState!.validate()) {
+                            Navigator.of(context).pop();
+                            showConfirmation(context);
+                          }
+                        },
+                        child: Container(
+                          width: Get.width,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                              color: const Color(0xffffffff),
+                              gradient: const LinearGradient(
+                                colors: [Color(0xff2A3171), Color(0xff4E5CD3)],
+                                begin: Alignment.centerLeft,
+                                end: Alignment.centerRight,
+                              ),
+                              borderRadius: BorderRadius.circular(25)),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 7.0),
+                            child: Text(
+                              "Submit",
+                              style: GoogleFonts.sourceSans3(
+                                  textStyle: const TextStyle(
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: 16,
+                                      color: Color(0xffffffff))),
+                              textAlign: TextAlign.center,
                             ),
-                            borderRadius: BorderRadius.circular(25)),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 7.0),
-                          child: Text(
-                            "Submit",
-                            style: GoogleFonts.sourceSans3(
-                                textStyle: const TextStyle(
-                                    fontWeight: FontWeight.w700,
-                                    fontSize: 16,
-                                    color: Color(0xffffffff))),
-                            textAlign: TextAlign.center,
                           ),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
@@ -316,8 +327,7 @@ class FavouritesDetailPage extends StatelessWidget {
                                   try {
                                     String? contactNumber =
                                         profile.parentContact;
-                                    if (contactNumber != null &&
-                                        contactNumber.isNotEmpty) {
+                                    if (contactNumber.isNotEmpty) {
                                       _launchPhoneDialer(contactNumber);
                                     } else {
                                       Get.snackbar(
@@ -349,7 +359,7 @@ class FavouritesDetailPage extends StatelessWidget {
                                       end: Alignment.centerRight,
                                     ),
                                   ),
-                                  child: Icon(
+                                  child: const Icon(
                                     Icons.call_outlined,
                                     color: Colors.white,
                                     size: 30,
@@ -363,23 +373,18 @@ class FavouritesDetailPage extends StatelessWidget {
                                 onTap: () async {
                                   String? contactNumber = profile.parentContact;
 
-                                  if (contactNumber != null) {
-                                    String phoneNumber = contactNumber
-                                        .replaceAll(RegExp(r'\D'), '');
+                                  String phoneNumber = contactNumber
+                                      .replaceAll(RegExp(r'\D'), '');
 
-                                    String whatsappUrl =
-                                        "https://wa.me/+91$phoneNumber";
-                                    if (await canLaunch(whatsappUrl)) {
-                                      await launch(whatsappUrl);
-                                    } else {
-                                      Get.snackbar(
-                                          "Error", "Unable to open WhatsApp");
-                                    }
+                                  String whatsappUrl =
+                                      "https://wa.me/+91$phoneNumber";
+                                  if (await canLaunch(whatsappUrl)) {
+                                    await launch(whatsappUrl);
                                   } else {
                                     Get.snackbar(
-                                        "Error", "Contact number not found");
+                                        "Error", "Unable to open WhatsApp");
                                   }
-                                },
+                                                                },
                                 child: Container(
                                   height: Get.height * 0.08,
                                   width: Get.width * 0.14,
@@ -434,7 +439,7 @@ class FavouritesDetailPage extends StatelessWidget {
                         child: Padding(
                           padding: const EdgeInsets.all(12.0),
                           child: Text(
-                            profile.about ?? "No about information",
+                            profile.about,
                             style: customTextStyle(
                                 fontSize: 14, color: const Color(0xff686D76)),
                           ),
@@ -465,23 +470,25 @@ class FavouritesDetailPage extends StatelessWidget {
                             defaultVerticalAlignment:
                                 TableCellVerticalAlignment.middle,
                             children: [
-                              buildRow("Phone No. :", profile.contact ?? ""),
-                              buildRow("Date of Birth :", profile.dob ?? ""),
-                              buildRow("Age (yrs) :", profile.age ?? ""),
-                              buildRow("Height (cm) :", profile.height ?? ""),
-                              buildRow("Weight (kg) :", profile.weight ?? ""),
+                              buildRow("Phone No. :", profile.contact),
+                              buildRow("Date of Birth :", profile.dob),
+                              buildRow("Age (yrs) :", profile.age),
+                              buildRow("Birth Time :", profile.birthTime),
+                              buildRow("Birth Place :", profile.birthPlace),
+                              buildRow("Height (cm) :", profile.height),
+                              buildRow("Weight (kg) :", profile.weight),
                               buildRow(
-                                  "Blood Group :", profile.bloodGroup ?? ""),
-                              buildRow("Body Type :", profile.bodyType ?? ""),
+                                  "Blood Group :", profile.bloodGroup),
+                              buildRow("Body Type :", profile.bodyType),
                               buildRow("Skin Complexion :",
-                                  profile.skinComplexion ?? ""),
+                                  profile.skinComplexion),
                               buildRow("Marital Status :",
-                                  profile.maritalStatus ?? ""),
+                                  profile.maritalStatus),
                               buildRow(
-                                  "Native Place :", profile.nativePlace ?? ""),
-                              buildRow("Lives In :", profile.livesIn ?? ""),
+                                  "Native Place :", profile.nativePlace),
+                              buildRow("Lives In :", profile.livesIn),
                               buildRow("Profile Created by :",
-                                  profile.createdBy ?? ""),
+                                  profile.createdBy),
                             ],
                           ),
                         ),
@@ -511,15 +518,15 @@ class FavouritesDetailPage extends StatelessWidget {
                             defaultVerticalAlignment:
                                 TableCellVerticalAlignment.middle,
                             children: [
-                              buildRow("Education :", profile.education ?? ""),
+                              buildRow("Education :", profile.education ),
                               buildRow(
-                                  "Profession :", profile.profession ?? ""),
+                                  "Profession :", profile.profession ),
                               buildRow(
-                                  "Designation :", profile.designation ?? ""),
-                              buildRow("Income (LPA) :", profile.income ?? ""),
-                              buildRow("Working At :", profile.workingAt ?? ""),
+                                  "Designation :", profile.designation ),
+                              buildRow("Income (LPA) :", profile.income ),
+                              buildRow("Working At :", profile.workingAt ),
                               buildRow("Work Location :",
-                                  profile.workLocation ?? ""),
+                                  profile.workLocation ),
                             ],
                           ),
                         ),
@@ -549,9 +556,9 @@ class FavouritesDetailPage extends StatelessWidget {
                             defaultVerticalAlignment:
                                 TableCellVerticalAlignment.middle,
                             children: [
-                              buildRow("Gotra :", profile.gotra ?? ""),
-                              buildRow("Manglik :", profile.manglik ?? ""),
-                              buildRow("Star/Raasi :", profile.rassi ?? ""),
+                              buildRow("Gotra :", profile.gotra ),
+                              buildRow("Manglik :", profile.manglik ),
+                              buildRow("Star/Raasi :", profile.rassi ),
                             ],
                           ),
                         ),
@@ -582,15 +589,15 @@ class FavouritesDetailPage extends StatelessWidget {
                                 TableCellVerticalAlignment.middle,
                             children: [
                               buildRow(
-                                  "Father’s Name :", profile.fatherName ?? ""),
+                                  "Father’s Name :", profile.fatherName ),
                               buildRow(
-                                  "Mother’s Name :", profile.motherName ?? ""),
+                                  "Mother’s Name :", profile.motherName ),
                               buildRow("Father’s Profession :",
-                                  profile.fatherProfession ?? ""),
+                                  profile.fatherProfession ),
                               buildRow("Mother’s Profession :",
-                                  profile.motherProfession ?? ""),
+                                  profile.motherProfession ),
                               buildRow(
-                                  "No. of Siblings :", profile.siblings ?? ""),
+                                  "No. of Siblings :", profile.siblings ),
                             ],
                           ),
                         ),
@@ -622,24 +629,22 @@ class FavouritesDetailPage extends StatelessWidget {
                             children: [
                               buildRow(
                                   "Preferred Age :",
-                                  "${profile.preferMinAge} - ${profile.preferMaxAge}" ??
-                                      ""),
+                                  "${profile.preferMinAge} - ${profile.preferMaxAge}"),
                               buildRow(
                                   "Preferred Height :",
-                                  "${profile.preferMinHeight} - ${profile.preferMaxHeight}" ??
-                                      ""),
+                                  "${profile.preferMinHeight} - ${profile.preferMaxHeight}"),
                               buildRow("Preferred Body Type :",
-                                  profile.preferBodyType ?? ""),
+                                  profile.preferBodyType ),
                               buildRow("Preferred Skin Complextion :",
-                                  profile.preferSkinComplexion ?? ""),
+                                  profile.preferSkinComplexion ),
                               buildRow("Preferred Marital Status :",
-                                  profile.preferMaritalStatus ?? ""),
+                                  profile.preferMaritalStatus ),
                               buildRow("Preferred Education :",
-                                  profile.preferEducation ?? ""),
+                                  profile.preferEducation ),
                               buildRow("Preferred Profession :",
-                                  profile.preferProfession ?? ""),
+                                  profile.preferProfession ),
                               buildRow("Preferred Location :",
-                                  profile.preferLivesIn ?? ""),
+                                  profile.preferLivesIn ),
                             ],
                           ),
                         ),

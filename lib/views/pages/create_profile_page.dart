@@ -559,8 +559,13 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                     child: Text('Not available'));
                               }
 
-                              var maritalStatusList =
-                                  snapshot.data!.maritalStatusList;
+                              // Filter out 'Any' and 'Other'
+                              var maritalStatusList = snapshot
+                                  .data!.maritalStatusList
+                                  .where((status) =>
+                                      status.name != 'Any' &&
+                                      status.name != 'Other')
+                                  .toList();
 
                               final selectedValue =
                                   editProfileController.selectedMaritalStatus;
@@ -585,15 +590,18 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                     child: Text(
                                       maritalStatus.name,
                                       style: customTextStyle(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w500),
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w500,
+                                      ),
                                       overflow: TextOverflow.ellipsis,
                                     ),
                                   );
                                 }).toList(),
                                 decoration: InputDecoration(
                                   contentPadding: const EdgeInsets.symmetric(
-                                      horizontal: 10, vertical: 15),
+                                    horizontal: 10,
+                                    vertical: 15,
+                                  ),
                                   border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(10),
                                     borderSide: const BorderSide(
@@ -830,8 +838,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                                 );
                                               }
                                             } catch (e) {
-                                              print(
-                                                  'Error parsing existing date: $e');
+                                              // print(
+                                              //     'Error parsing existing date: $e');
                                             }
                                           }
 
@@ -955,124 +963,297 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                       height(6),
                                       Flexible(
                                         child: FutureBuilder<BloodTypeResponse>(
-                                            future: futurebodyTypeListList,
-                                            builder: (context, snapshot) {
-                                              if (snapshot.connectionState ==
-                                                  ConnectionState.waiting) {
-                                                return const Center(
-                                                    child:
-                                                        CupertinoActivityIndicator());
-                                              } else if (snapshot.hasError) {
-                                                return Center(
-                                                    child: Text(
-                                                        'Error: ${snapshot.error}'));
-                                              } else if (!snapshot.hasData ||
-                                                  snapshot.data?.bloodTypeList
-                                                          .isEmpty ==
-                                                      true) {
-                                                return const Center(
-                                                    child:
-                                                        Text('Not available'));
-                                              }
+                                          future: futurebodyTypeListList,
+                                          builder: (context, snapshot) {
+                                            if (snapshot.connectionState ==
+                                                ConnectionState.waiting) {
+                                              return const Center(
+                                                  child:
+                                                      CupertinoActivityIndicator());
+                                            } else if (snapshot.hasError) {
+                                              return Center(
+                                                  child: Text(
+                                                      'Error: ${snapshot.error}'));
+                                            } else if (!snapshot.hasData ||
+                                                snapshot.data?.bloodTypeList
+                                                        .isEmpty ==
+                                                    true) {
+                                              return const Center(
+                                                  child: Text('Not available'));
+                                            }
 
-                                              var bloodTypeList =
-                                                  snapshot.data!.bloodTypeList;
+                                            // Filter out 'Any' and 'Other'
+                                            var bloodTypeList = snapshot
+                                                .data!.bloodTypeList
+                                                .where((bloodType) =>
+                                                    bloodType.name != 'Any' &&
+                                                    bloodType.name != 'Other')
+                                                .toList();
 
-                                              String? selectedValue;
-                                              if (editProfileController
-                                                      .selectedBloodGroup !=
-                                                  null) {
-                                                var matchById =
-                                                    bloodTypeList.any((item) =>
-                                                        item.id ==
-                                                        editProfileController
-                                                            .selectedBloodGroup);
-                                                if (matchById) {
-                                                  selectedValue =
+                                            String? selectedValue;
+                                            if (editProfileController
+                                                    .selectedBloodGroup !=
+                                                null) {
+                                              var matchById = bloodTypeList.any(
+                                                  (item) =>
+                                                      item.id ==
                                                       editProfileController
-                                                          .selectedBloodGroup;
-                                                } else {
-                                                  var matchByName =
-                                                      bloodTypeList.firstWhere(
-                                                    (item) =>
-                                                        item.name ==
-                                                        editProfileController
-                                                            .selectedBloodGroup,
-                                                    orElse: () =>
-                                                        bloodTypeList[0],
-                                                  );
-                                                  selectedValue =
-                                                      matchByName.id;
+                                                          .selectedBloodGroup);
+                                              if (matchById) {
+                                                selectedValue =
+                                                    editProfileController
+                                                        .selectedBloodGroup;
+                                              } else {
+                                                var matchByName =
+                                                    bloodTypeList.firstWhere(
+                                                  (item) =>
+                                                      item.name ==
+                                                      editProfileController
+                                                          .selectedBloodGroup,
+                                                  orElse: () =>
+                                                      bloodTypeList[0],
+                                                );
+                                                selectedValue = matchByName.id;
 
+                                                editProfileController
+                                                        .selectedBloodGroup =
+                                                    selectedValue;
+                                              }
+                                            }
+
+                                            return DropdownButtonFormField<
+                                                String>(
+                                              isExpanded: true,
+                                              value: selectedValue,
+                                              hint: Text(
+                                                'Select',
+                                                style: customTextStyle(),
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                              onChanged: (newValue) {
+                                                setState(() {
                                                   editProfileController
                                                           .selectedBloodGroup =
-                                                      selectedValue;
-                                                }
-                                              }
-
-                                              return DropdownButtonFormField<
-                                                  String>(
-                                                isExpanded: true,
-                                                value: selectedValue,
-                                                hint: Text(
-                                                  'Select',
-                                                  style: customTextStyle(),
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                ),
-                                                onChanged: (newValue) {
-                                                  setState(() {
-                                                    editProfileController
-                                                            .selectedBloodGroup =
-                                                        newValue;
-                                                  });
-                                                },
-                                                items: bloodTypeList
-                                                    .map((bloodType) {
-                                                  return DropdownMenuItem<
-                                                      String>(
-                                                    value: bloodType.id,
-                                                    child: Text(
-                                                      bloodType.name,
-                                                      style: customTextStyle(
-                                                          fontSize: 14,
-                                                          fontWeight:
-                                                              FontWeight.w500),
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
+                                                      newValue;
+                                                });
+                                              },
+                                              items: bloodTypeList
+                                                  .map((bloodType) {
+                                                return DropdownMenuItem<String>(
+                                                  value: bloodType.id,
+                                                  child: Text(
+                                                    bloodType.name,
+                                                    style: customTextStyle(
+                                                      fontSize: 14,
+                                                      fontWeight:
+                                                          FontWeight.w500,
                                                     ),
-                                                  );
-                                                }).toList(),
-                                                decoration: InputDecoration(
-                                                  contentPadding:
-                                                      const EdgeInsets
-                                                          .symmetric(
-                                                          horizontal: 10,
-                                                          vertical: 5),
-                                                  border: OutlineInputBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10),
-                                                    borderSide:
-                                                        const BorderSide(
-                                                            color: Color(
-                                                                0xff9C9C9C)),
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
                                                   ),
+                                                );
+                                              }).toList(),
+                                              decoration: InputDecoration(
+                                                contentPadding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 10,
+                                                        vertical: 5),
+                                                border: OutlineInputBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                  borderSide: const BorderSide(
+                                                      color: Color(0xff9C9C9C)),
                                                 ),
-                                                menuMaxHeight: 200,
-                                                validator: (value) {
-                                                  if (value == null ||
-                                                      value.isEmpty) {
-                                                    return "Required";
-                                                  }
-                                                  return null;
-                                                },
-                                              );
-                                            }),
+                                              ),
+                                              menuMaxHeight: 200,
+                                              validator: (value) {
+                                                if (value == null ||
+                                                    value.isEmpty) {
+                                                  return "Required";
+                                                }
+                                                return null;
+                                              },
+                                            );
+                                          },
+                                        ),
                                       )
                                     ],
                                   ),
                                 )
+                              ],
+                            ),
+                          ),
+                          height(15),
+                          SizedBox(
+                            width: Get.width,
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Expanded(
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "Birth Time",
+                                        style: customTextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w500,
+                                          color: const Color(0xff686D76),
+                                        ),
+                                      ),
+                                      const SizedBox(height: 6),
+                                      GestureDetector(
+                                        onTap: () async {
+                                          TimeOfDay initialTime =
+                                              TimeOfDay.now();
+
+                                          if (editProfileController
+                                              .birthTimeController
+                                              .text
+                                              .isNotEmpty) {
+                                            try {
+                                              final timeParts =
+                                                  editProfileController
+                                                      .birthTimeController.text
+                                                      .split(':');
+                                              if (timeParts.length == 2) {
+                                                initialTime = TimeOfDay(
+                                                  hour: int.parse(timeParts[0]),
+                                                  minute:
+                                                      int.parse(timeParts[1]),
+                                                );
+                                              }
+                                            } catch (e) {
+                                              // Handle parsing error
+                                            }
+                                          }
+
+                                          TimeOfDay? pickedTime =
+                                              await showTimePicker(
+                                            context: context,
+                                            initialTime: initialTime,
+                                            builder: (BuildContext context,
+                                                Widget? child) {
+                                              return MediaQuery(
+                                                data: MediaQuery.of(context)
+                                                    .copyWith(
+                                                        alwaysUse24HourFormat:
+                                                            false),
+                                                child: child!,
+                                              );
+                                            },
+                                          );
+
+                                          if (pickedTime != null) {
+                                            String formattedTime =
+                                                "${pickedTime.hourOfPeriod.toString().padLeft(2, '0')}:${pickedTime.minute.toString().padLeft(2, '0')} ${pickedTime.period == DayPeriod.am ? 'AM' : 'PM'}";
+                                            editProfileController
+                                                .birthTimeController
+                                                .text = formattedTime;
+                                          }
+                                        },
+                                        child: AbsorbPointer(
+                                          child: SizedBox(
+                                            height:
+                                                50, // Set fixed height for consistency
+                                            child: TextFormField(
+                                              controller: editProfileController
+                                                  .birthTimeController,
+                                              readOnly: true,
+                                              validator: (value) {
+                                                if (value == null ||
+                                                    value.isEmpty) {
+                                                  return 'Required';
+                                                }
+                                                return null;
+                                              },
+                                              decoration: InputDecoration(
+                                                hintText: 'HH:MM AM/PM',
+                                                hintStyle: customTextStyle(
+                                                  color: Colors.grey,
+                                                  fontSize: 12,
+                                                ),
+                                                contentPadding:
+                                                    const EdgeInsets.symmetric(
+                                                  vertical: 10.0,
+                                                  horizontal: 12.0,
+                                                ),
+                                                border: OutlineInputBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                ),
+                                                focusColor:
+                                                    const Color(0xff9C9C9C),
+                                                errorBorder: OutlineInputBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                  borderSide: const BorderSide(
+                                                      color: Colors.red),
+                                                ),
+                                                errorStyle: const TextStyle(
+                                                  height: 0,
+                                                  fontSize: 0,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                width(7),
+                                Expanded(
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "Birth Place",
+                                        style: customTextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w500,
+                                          color: const Color(0xff686D76),
+                                        ),
+                                      ),
+                                      height(6),
+                                      SizedBox(
+                                        height: Get.height * 0.054,
+                                        child: TextFormField(
+                                          controller: editProfileController
+                                              .birthPlaceController,
+                                          decoration: InputDecoration(
+                                            border: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                            ),
+                                            contentPadding:
+                                                const EdgeInsets.symmetric(
+                                              vertical: 10.0,
+                                              horizontal: 12.0,
+                                            ),
+                                            errorStyle: const TextStyle(
+                                              height:
+                                                  0, 
+                                              fontSize: 0,
+                                            ),
+                                          ),
+                                          keyboardType: TextInputType.text,
+                                          validator: (value) {
+                                            if (value == null ||
+                                                value.isEmpty) {
+                                              return "Required";
+                                            }
+                                            return null;
+                                          },
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
                               ],
                             ),
                           ),

@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import '../../constants/dimensions.dart';
 import '../../constants/instance.dart';
 import '../../constants/text_style.dart';
-import '../auth/password_change_successfully_page.dart';
 
 class CreateNewPasswordPage extends StatelessWidget {
   CreateNewPasswordPage({super.key});

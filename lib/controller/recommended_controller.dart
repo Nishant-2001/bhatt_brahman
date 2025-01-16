@@ -1,10 +1,8 @@
 import 'dart:developer';
-
 import 'package:get/get.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../constants/api_endpoints.dart';
 import '../model/partner_model.dart';
 
@@ -40,7 +38,7 @@ class RecommendedController extends GetxController {
               .map((json) => PartnerModel.fromJson(json))
               .toList();
 
-          // log('Partners loaded: ${partners.length}');
+          log('Partners loaded: ${partners.length}');
         }
       }
     } catch (e) {

@@ -1,7 +1,9 @@
+import 'package:bhatt_brahman_var_vadhu/services/fcm_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../constants/text_style.dart';
+import '../../services/notification_service.dart';
 import 'home_page.dart';
 import 'welcome_screen.dart';
 
@@ -13,9 +15,16 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  NotificationService notificationService = NotificationService();
+
   @override
   void initState() {
     super.initState();
+    notificationService.requestNotificationPermission();
+    notificationService.getDeviceToken();
+    notificationService.firebaseInit(context);
+    notificationService.setupInteractMessage(context);
+    FcmService.firebaseInit();
     _checkLoginStatus();
   }
 

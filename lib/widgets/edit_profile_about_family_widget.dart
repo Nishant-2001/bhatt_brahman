@@ -143,8 +143,12 @@ class _EditProfileAboutFamilyWidgetState
                                     child: Text('No professions available'));
                               }
 
-                              var professionList =
-                                  snapshot.data!.professionList;
+                              // Filter out 'Any' and 'Others' professions
+                              var professionList = snapshot.data!.professionList
+                                  .where((profession) =>
+                                      profession.name != 'Any' &&
+                                      profession.name != 'Others')
+                                  .toList();
 
                               // Find the currently selected profession model
                               ProfessionModel? selectedProfession =
@@ -174,9 +178,7 @@ class _EditProfileAboutFamilyWidgetState
                                 dropdownBuilder: (context, selectedItem) {
                                   return Text(
                                     selectedItem?.name ?? 'Select',
-                                    style: customTextStyle(
-                                      fontSize: 14,
-                                    ),
+                                    style: customTextStyle(fontSize: 14),
                                     overflow: TextOverflow.ellipsis,
                                   );
                                 },
@@ -190,8 +192,7 @@ class _EditProfileAboutFamilyWidgetState
                                     ),
                                   ),
                                   fit: FlexFit.loose,
-                                  constraints:
-                                      const BoxConstraints(maxHeight: 350),
+                                  constraints: BoxConstraints(maxHeight: 350),
                                 ),
                                 validator: (value) {
                                   if (value == null) {
@@ -243,8 +244,13 @@ class _EditProfileAboutFamilyWidgetState
                                     child: Text('No profession available'));
                               }
 
-                              var professionList =
-                                  snapshot.data!.professionList;
+                              // Filter out 'Any' and 'Others' professions
+                              var professionList = snapshot.data!.professionList
+                                  .where((profession) =>
+                                      profession.name != 'Any' &&
+                                      profession.name != 'Others')
+                                  .toList();
+
                               var uniqueProfessions =
                                   professionList.toSet().toList();
                               var selectedValue = editProfileController
@@ -276,8 +282,7 @@ class _EditProfileAboutFamilyWidgetState
                                 dropdownBuilder: (context, selectedItem) {
                                   return Container(
                                     padding: const EdgeInsets.symmetric(
-                                      horizontal: 10,
-                                    ),
+                                        horizontal: 10),
                                     child: Text(
                                       selectedItem?.name ?? 'Select',
                                       style: customTextStyle(
@@ -293,8 +298,6 @@ class _EditProfileAboutFamilyWidgetState
                                       editProfileController
                                               .selectedMotherProfession =
                                           newValue.id;
-                                      // print(
-                                      //     "Selected profession ID: ${newValue.id}");
                                     });
                                   }
                                 },

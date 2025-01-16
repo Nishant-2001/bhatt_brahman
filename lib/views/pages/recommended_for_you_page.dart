@@ -7,6 +7,7 @@ import '../../constants/dimensions.dart';
 import '../../constants/instance.dart';
 import '../../constants/text_style.dart';
 import '../../controller/recommended_controller.dart';
+import 'notification_page.dart';
 import 'recommended_for_you_detail_page.dart';
 
 class RecommendedForYouPage extends StatelessWidget {
@@ -33,17 +34,22 @@ class RecommendedForYouPage extends StatelessWidget {
         ),
         centerTitle: true,
         actions: [
-          IconButton(
-            onPressed: () {},
-            icon: Image.asset(
-              'assets/Vector.png',
-              height: 22,
-              width: 22,
+          // IconButton(
+          //   onPressed: () {},
+          //   icon: Image.asset(
+          //     'assets/Vector.png',
+          //     height: 22,
+          //     width: 22,
+          //   ),
+          // ),
+          GestureDetector(
+            onTap: () {
+              Get.to(() => const NotificationPage());
+            },
+            child: const Icon(
+              Icons.notifications_outlined,
+              size: 28,
             ),
-          ),
-          const Icon(
-            Icons.notifications_outlined,
-            size: 28,
           ),
           width(15),
         ],
@@ -136,6 +142,7 @@ class RecommendedForYouPage extends StatelessWidget {
                                           MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(
+                                          // ignore: unnecessary_null_comparison
                                           "${age.isNotEmpty ? '$age Yrs' : ''} ${partner.height != null ? '| ${partner.height} cm' : ''}",
                                           style: customTextStyle(
                                               color: const Color(0xff686D76)),

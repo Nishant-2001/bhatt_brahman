@@ -13,6 +13,7 @@ import '../../widgets/find_matches_widget.dart';
 import '../../widgets/heading_widget.dart';
 import '../../widgets/recommended_for_you_widget.dart';
 import 'create_profile_page.dart';
+import 'notification_page.dart';
 import 'recommended_for_you_page.dart';
 
 class HomeTabPage extends StatefulWidget {
@@ -50,6 +51,20 @@ class _HomeTabPageState extends State<HomeTabPage> {
   //     });
   //   }
   // }
+  int viewedCount = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    loadNotificationCount();
+  }
+
+  Future<void> loadNotificationCount() async {
+    int count = await notificationController.fetchNotificationCount();
+    setState(() {
+      viewedCount = count;
+    });
+  }
 
   Future<void> handleVerificationStatus() async {
     final verificationStatus =
@@ -146,11 +161,35 @@ class _HomeTabPageState extends State<HomeTabPage> {
           },
         ),
         actions: [
-          const Icon(
-            Icons.notifications_outlined,
-            size: 28,
+          GestureDetector(
+            onTap: () {
+              notificationController.removeNotificationBadge();
+              Get.to(() => const NotificationPage());
+            },
+            child: Stack(
+              alignment: Alignment.topRight,
+              children: [
+                const Icon(
+                  Icons.notifications_outlined,
+                  size: 28,
+                ),
+                if (viewedCount > 0)
+                  Positioned(
+                    right: 0,
+                    top: 0,
+                    child: Container(
+                      width: Get.width * 0.019,
+                      height: Get.height * 0.019,
+                      decoration: const BoxDecoration(
+                        color: Colors.blue,
+                        shape: BoxShape.circle,
+                      ),
+                    ),
+                  ),
+              ],
+            ),
           ),
-          width(15),
+          width(Get.width * 0.040),
         ],
       ),
       body: Stack(
@@ -186,6 +225,7 @@ class _HomeTabPageState extends State<HomeTabPage> {
                       child: ListView(
                         physics: const AlwaysScrollableScrollPhysics(),
                         children: [
+                          height(Get.height * 0.003),
                           const SizedBox(child: BannerWidget()),
                           height(12),
                           const CategoriesWidget(),
@@ -217,10 +257,6 @@ class _HomeTabPageState extends State<HomeTabPage> {
               ],
             ),
           ),
-          // if (_isRefreshing)
-          //   const Center(
-          //     child: CircularProgressIndicator(),
-          //   ),
         ],
       ),
     );

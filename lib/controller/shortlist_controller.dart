@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:developer';
+// import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -41,7 +41,7 @@ class ShortlistController extends GetxController {
             backgroundColor: Colors.red, colorText: Colors.white);
       }
     } catch (e) {
-      log("loooog ----- $e");
+      // log("loooog ----- $e");
     }
   }
   
@@ -77,7 +77,7 @@ class ShortlistController extends GetxController {
             backgroundColor: Colors.red, colorText: Colors.white);
       }
     } catch (e) {
-      log("log ----- $e");
+      // log("log ----- $e");
     }
   }
 
@@ -108,11 +108,11 @@ class ShortlistController extends GetxController {
         }
 
         final List<dynamic> list = data['data'];
-        log("Fetched list: $list");
+        // log("Fetched list: $list");
         interests = list.map((e) => ShortlistedModel.fromJson(e)).toList();
       } else {}
     } catch (e) {
-      log("Log ----------- $e");
+      // log("Log ----------- $e");
     }
     return interests;
   }

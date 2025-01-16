@@ -1,4 +1,4 @@
-import 'package:Bhatt_Brahman_Var_Vadhu/constants/instance.dart';
+import 'package:bhatt_brahman_var_vadhu/constants/instance.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../constants/app_constant.dart';
@@ -7,6 +7,7 @@ import '../../constants/text_style.dart';
 import '../../controller/recent_join_controller.dart';
 import '../../model/recent_join_model.dart';
 import 'newly_joined_detail_page.dart';
+import 'notification_page.dart';
 
 class NewlyJoinedPage extends StatefulWidget {
   const NewlyJoinedPage({super.key});
@@ -44,17 +45,22 @@ class _NewlyJoinedPageState extends State<NewlyJoinedPage> {
         ),
         centerTitle: true,
         actions: [
-          IconButton(
-            onPressed: () {},
-            icon: Image.asset(
-              'assets/Vector.png',
-              height: 24,
-              width: 24,
+          // IconButton(
+          //   onPressed: () {},
+          //   icon: Image.asset(
+          //     'assets/Vector.png',
+          //     height: 24,
+          //     width: 24,
+          //   ),
+          // ),
+          GestureDetector(
+            onTap: () {
+              Get.to(() => const NotificationPage());
+            },
+            child: const Icon(
+              Icons.notifications_outlined,
+              size: 28,
             ),
-          ),
-          const Icon(
-            Icons.notifications_outlined,
-            size: 28,
           ),
           width(15),
         ],
@@ -124,7 +130,7 @@ class _NewlyJoinedPageState extends State<NewlyJoinedPage> {
                                       : 'assets/bride.jpg') as ImageProvider,
                             ),
                             title: Text(
-                              "${user.firstName} ${user.lastName}" ?? 'No Name',
+                              "${user.firstName} ${user.lastName}",
                               style: customTextStyle(
                                   fontSize: 14, fontWeight: FontWeight.w500),
                             ),
@@ -167,8 +173,7 @@ class _NewlyJoinedPageState extends State<NewlyJoinedPage> {
                                     ),
                                     width(4),
                                     Text(
-                                      "${user.nativePlace?.split(' ').first}..." ??
-                                          'N/A',
+                                      "${user.nativePlace?.split(' ').first}...",
                                       style: customTextStyle(
                                         fontSize: 10,
                                         fontWeight: FontWeight.w600,

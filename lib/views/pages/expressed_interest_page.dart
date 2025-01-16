@@ -1,9 +1,6 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../constants/app_constant.dart';
 import '../../constants/dimensions.dart';
@@ -11,9 +8,8 @@ import '../../constants/instance.dart';
 import '../../constants/text_style.dart';
 import '../../controller/expressed_interest_controller.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:permission_handler/permission_handler.dart';
-import '../../model/login_response_model.dart';
 import 'expressed_interest_detail_page.dart';
+import 'notification_page.dart';
 
 class ExpressedInterestPage extends StatelessWidget {
   ExpressedInterestPage({super.key}) {
@@ -43,7 +39,7 @@ class ExpressedInterestPage extends StatelessWidget {
           mode: LaunchMode.platformDefault,
         );
       } else {
-        print('Cannot launch URL: $telUri');
+        // print('Cannot launch URL: $telUri');
         Get.snackbar(
           "Error",
           "Unable to open phone dialer",
@@ -51,7 +47,7 @@ class ExpressedInterestPage extends StatelessWidget {
         );
       }
     } catch (e) {
-      print('Error launching phone dialer: $e');
+      // print('Error launching phone dialer: $e');
       Get.snackbar(
         "Error",
         "Failed to launch phone dialer",
@@ -79,17 +75,22 @@ class ExpressedInterestPage extends StatelessWidget {
         ),
         centerTitle: true,
         actions: [
-          IconButton(
-            onPressed: () {},
-            icon: Image.asset(
-              'assets/Vector.png',
-              height: 24,
-              width: 24,
+          // IconButton(
+          //   onPressed: () {},
+          //   icon: Image.asset(
+          //     'assets/Vector.png',
+          //     height: 24,
+          //     width: 24,
+          //   ),
+          // ),
+          GestureDetector(
+            onTap: () {
+              Get.to(() => const NotificationPage());
+            },
+            child: const Icon(
+              Icons.notifications_outlined,
+              size: 28,
             ),
-          ),
-          const Icon(
-            Icons.notifications_outlined,
-            size: 28,
           ),
           width(15),
         ],
@@ -277,7 +278,8 @@ class ExpressedInterestPage extends StatelessWidget {
                                             child: GestureDetector(
                                               onTap: () {
                                                 notInterestedPersonController
-                                                    .sendRejectRequest(item.userId);
+                                                    .sendRejectRequest(
+                                                        item.userId);
                                               },
                                               child: Container(
                                                 width: Get.width * 0.4,
@@ -380,8 +382,8 @@ class ExpressedInterestPage extends StatelessWidget {
                                                     );
                                                   }
                                                 } catch (e) {
-                                                  print(
-                                                      'Error getting contact number: $e');
+                                                  // print(
+                                                  //     'Error getting contact number: $e');
                                                   Get.snackbar(
                                                     "Error",
                                                     "Failed to get contact number",

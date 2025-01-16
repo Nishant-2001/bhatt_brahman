@@ -25,6 +25,8 @@ class EditProfileController {
   final TextEditingController siblingNumberController = TextEditingController();
   final TextEditingController aboutController = TextEditingController();
   final TextEditingController dateOfBirthController = TextEditingController();
+  final TextEditingController birthTimeController = TextEditingController();
+  final TextEditingController birthPlaceController = TextEditingController();
   final TextEditingController heightController = TextEditingController();
   final TextEditingController weightController = TextEditingController();
   final TextEditingController incomeController = TextEditingController();
@@ -75,7 +77,7 @@ class EditProfileController {
     try {
       ProfileResponseModel profile = await profileController.fetchProfileData();
 
-      firstNameController.text = profile.data.firstName ?? '';
+      firstNameController.text = profile.data.firstName;
       fatherNameController.text = profile.data.fathersName ?? '';
       lastNameController.text = profile.data.lastName ?? '';
       contactController.text = profile.data.contact ?? '';
@@ -83,13 +85,14 @@ class EditProfileController {
       motherNameController.text = profile.data.mothersName ?? '';
       siblingNumberController.text = profile.data.numberOfSiblings ?? '';
       aboutController.text = profile.data.about ?? '';
-
+      birthPlaceController.text = profile.data.birthPlace ?? '';
+      birthTimeController.text = profile.data.birthTime ?? '';
       heightController.text = profile.data.height ?? '';
       weightController.text = profile.data.weight ?? '';
       weightController.text = profile.data.weight ?? '';
       incomeController.text = profile.data.income ?? '';
       workingAtController.text = profile.data.workingAt ?? '';
-      ageController.text = profile.data.age.toString() ?? '';
+      ageController.text = profile.data.age.toString();
       designationController.text = profile.data.designation ?? '';
 
       if (profile.data.dob != null && profile.data.dob!.isNotEmpty) {
@@ -125,7 +128,7 @@ class EditProfileController {
             }
             ageController.text = age.toString();
           } else {
-            print('Could not parse date: ${profile.data.dob}');
+            // print('Could not parse date: ${profile.data.dob}');
 
             dateOfBirthController.text = profile.data.dob ?? '';
             ageController.text = profile.data.age?.toString() ?? '';
@@ -209,7 +212,7 @@ class EditProfileController {
       String? token = prefs.getString('token');
 
       if (token != null) {
-        request.headers['token'] = '$token';
+        request.headers['token'] = token;
       }
 
       Map<String, String> fields = {
@@ -222,6 +225,8 @@ class EditProfileController {
         'contact': contactController.text,
         'email': emailController.text,
         'mother_name': motherNameController.text,
+        'birth_place': birthPlaceController.text,
+        'birth_time': birthTimeController.text,
         'fathers_profession': selectedFatherProfession ?? "",
         'mothers_profession': selectedMotherProfession ?? "",
         'siblings_no': siblingNumberController.text,
@@ -272,7 +277,7 @@ class EditProfileController {
       );
 
       final response = await http.Response.fromStream(streamedResponse);
-      log('[Response] Status Code: ${response.statusCode}');
+      // log('[Response] Status Code: ${response.statusCode}');
       log('[Response] Body: ${response.body}');
 
       if (response.statusCode == 200) {
@@ -331,6 +336,8 @@ class EditProfileController {
     incomeController.clear();
     workingAtController.clear();
     ageController.clear();
+    birthPlaceController.clear();
+    birthTimeController.clear();
 
     selectedUserType = null;
     profileCreatedBY = null;
@@ -352,16 +359,7 @@ class EditProfileController {
     profileImage = null;
     imageNotifier.value = null;
 
-    log('[Debug] All form fields cleared');
-  }
-
-  void _showErrorSnackBar(BuildContext context, String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        backgroundColor: Colors.red,
-      ),
-    );
+    // log('[Debug] All form fields cleared');
   }
 
   void dispose() {

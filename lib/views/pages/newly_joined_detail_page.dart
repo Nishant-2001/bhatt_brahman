@@ -83,6 +83,7 @@ class NewlyJoinedDetailPage extends StatelessWidget {
   }
 
   void showReportDialog(BuildContext context) {
+    final _formKey = GlobalKey<FormState>();
     showDialog(
       context: context,
       builder: (context) {
@@ -94,61 +95,72 @@ class NewlyJoinedDetailPage extends StatelessWidget {
             width: Get.width * 0.9,
             child: Padding(
               padding: const EdgeInsets.all(16.0),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "Report",
-                    style: customTextStyle(
-                        fontSize: 16, fontWeight: FontWeight.w500),
-                  ),
-                  height(Get.height * 0.03),
-                  TextFormField(
-                    controller: reportController.descriptionController,
-                    decoration: InputDecoration(
-                        hintText: "Enter Description...",
-                        hintStyle: customTextStyle(
-                            fontSize: 14, fontWeight: FontWeight.w400),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        )),
-                    maxLines: 6,
-                  ),
-                  height(Get.height * 0.03),
-                  Material(
-                    child: GestureDetector(
-                      onTap: () {
-                        Navigator.of(context).pop();
-                        showConfirmation(context);
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Report",
+                      style: customTextStyle(
+                          fontSize: 16, fontWeight: FontWeight.w500),
+                    ),
+                    height(Get.height * 0.03),
+                    TextFormField(
+                      controller: reportController.descriptionController,
+                      decoration: InputDecoration(
+                          hintText: "Enter Description...",
+                          hintStyle: customTextStyle(
+                              fontSize: 14, fontWeight: FontWeight.w400),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          )),
+                      maxLines: 6,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Enter report description";
+                        }
+                        return null;
                       },
-                      child: Container(
-                        width: Get.width,
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                            color: const Color(0xffffffff),
-                            gradient: const LinearGradient(
-                              colors: [Color(0xff2A3171), Color(0xff4E5CD3)],
-                              begin: Alignment.centerLeft,
-                              end: Alignment.centerRight,
+                    ),
+                    height(Get.height * 0.03),
+                    Material(
+                      child: GestureDetector(
+                        onTap: () {
+                          if (_formKey.currentState!.validate()) {
+                            Navigator.of(context).pop();
+                            showConfirmation(context);
+                          }
+                        },
+                        child: Container(
+                          width: Get.width,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                              color: const Color(0xffffffff),
+                              gradient: const LinearGradient(
+                                colors: [Color(0xff2A3171), Color(0xff4E5CD3)],
+                                begin: Alignment.centerLeft,
+                                end: Alignment.centerRight,
+                              ),
+                              borderRadius: BorderRadius.circular(25)),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 7.0),
+                            child: Text(
+                              "Submit",
+                              style: GoogleFonts.sourceSans3(
+                                  textStyle: const TextStyle(
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: 16,
+                                      color: Color(0xffffffff))),
+                              textAlign: TextAlign.center,
                             ),
-                            borderRadius: BorderRadius.circular(25)),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 7.0),
-                          child: Text(
-                            "Submit",
-                            style: GoogleFonts.sourceSans3(
-                                textStyle: const TextStyle(
-                                    fontWeight: FontWeight.w700,
-                                    fontSize: 16,
-                                    color: Color(0xffffffff))),
-                            textAlign: TextAlign.center,
                           ),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
@@ -323,6 +335,9 @@ class NewlyJoinedDetailPage extends StatelessWidget {
                             children: [
                               buildRow("Phone No. :", user.contact ?? ""),
                               buildRow("Date of Birth :", user.dob ?? ""),
+                              buildRow("Age (yrs) :", user.age ?? ""),
+                              buildRow("Birth Time :", user.birthTime ?? ""),
+                              buildRow("Birth Place :", user.birthPlace ?? ""),
                               buildRow("Height (in cm) :", user.height ?? ""),
                               buildRow("Weight (in kg) :", user.weight ?? ""),
                               buildRow("Blood Group :", user.bloodGroup ?? ""),
@@ -474,14 +489,12 @@ class NewlyJoinedDetailPage extends StatelessWidget {
                             children: [
                               buildRow(
                                   "Preferred Age :",
-                                  '${user.preferMinAge} - ${user.preferMaxAge}' ??
-                                      ""),
+                                  '${user.preferMinAge} - ${user.preferMaxAge}'),
                               buildRow(
                                   "Preferred Height :",
-                                  "${user.preferMinHeight} - ${user.preferMaxHeight}" ??
-                                      ""),
+                                  "${user.preferMinHeight} - ${user.preferMaxHeight}"),
                               buildRow("Preferred Body Type :",
-                                  "${user.preferBodyType}" ?? ""),
+                                  "${user.preferBodyType}"),
                               buildRow("Preferred Skin Complextion ",
                                   user.preferSkinComplexion ?? ""),
                               buildRow("Preferred Marital Status :",

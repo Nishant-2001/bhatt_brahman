@@ -5,7 +5,6 @@ import 'package:get/get.dart';
 import '../../constants/dimensions.dart';
 import '../../constants/instance.dart';
 import '../../constants/text_style.dart';
-import 'new_password_forgot_page.dart';
 
 class OtpVerificationPage extends StatefulWidget {
   const OtpVerificationPage({super.key});

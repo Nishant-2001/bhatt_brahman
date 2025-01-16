@@ -6,6 +6,7 @@ import '../../constants/dimensions.dart';
 import '../../constants/instance.dart';
 import '../../constants/text_style.dart';
 import '../../model/viewed_profile_model.dart';
+import 'notification_page.dart';
 import 'viewed_profile_detail_page.dart';
 
 class ViewedProfilePage extends StatefulWidget {
@@ -44,17 +45,22 @@ class _ViewedProfilePageState extends State<ViewedProfilePage> {
         ),
         centerTitle: true,
         actions: [
-          IconButton(
-            onPressed: () {},
-            icon: Image.asset(
-              'assets/Vector.png',
-              height: 24,
-              width: 24,
+          // IconButton(
+          //   onPressed: () {},
+          //   icon: Image.asset(
+          //     'assets/Vector.png',
+          //     height: 24,
+          //     width: 24,
+          //   ),
+          // ),
+          GestureDetector(
+            onTap: () {
+              Get.to(() => const NotificationPage());
+            },
+            child: const Icon(
+              Icons.notifications_outlined,
+              size: 28,
             ),
-          ),
-          const Icon(
-            Icons.notifications_outlined,
-            size: 28,
           ),
           width(15),
         ],
@@ -110,8 +116,8 @@ class _ViewedProfilePageState extends State<ViewedProfilePage> {
                                         vertical: 8.0),
                                     child: GestureDetector(
                                       onTap: () {
-                                        Get.to(() =>
-                                             ViewedProfileDetailPage(profile: profile));
+                                        Get.to(() => ViewedProfileDetailPage(
+                                            profile: profile));
                                       },
                                       child: Container(
                                         width: Get.width,
@@ -128,8 +134,35 @@ class _ViewedProfilePageState extends State<ViewedProfilePage> {
                                               radius: 30,
                                               backgroundColor:
                                                   const Color(0xffffffff),
-                                              backgroundImage: NetworkImage(
-                                                  profile.profileImg),
+                                              child: ClipOval(
+                                                child: Image.network(
+                                                  profile.profileImg,
+                                                  fit: BoxFit.cover,
+                                                  width: 60,
+                                                  height: 60,
+                                                  loadingBuilder: (context,
+                                                      child, loadingProgress) {
+                                                    if (loadingProgress ==
+                                                        null) {
+                                                      return child;
+                                                    } else {
+                                                      return const Center(
+                                                          child:
+                                                              CircularProgressIndicator());
+                                                    }
+                                                  },
+                                                  errorBuilder: (context, error,
+                                                      stackTrace) {
+                                                    return Image.asset(
+                                                      profile.userType ==
+                                                              "Bride"
+                                                          ? 'assets/bride.jpg'
+                                                          : 'assets/groom.jpg',
+                                                      fit: BoxFit.cover,
+                                                    );
+                                                  },
+                                                ),
+                                              ),
                                             ),
                                             title: Text(
                                               "${profile.firstName} ${profile.lastName}",

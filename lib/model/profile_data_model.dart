@@ -55,6 +55,8 @@ class ProfileData {
   String? nativePlaceId;
   String? livesInId;
   String? workLocationId;
+  String? birthTime;
+  String? birthPlace;
   final List<String> additionalImages;
 
 
@@ -112,6 +114,8 @@ class ProfileData {
     this.rassiId,
     this.skinComplexionId,
     this.workLocationId,
+    this.birthPlace,
+    this.birthTime,
     required this.additionalImages,
   });
 
@@ -170,6 +174,8 @@ class ProfileData {
       mothersProfession: json['mothers_profession_name'],
       numberOfSiblings: json['siblings_no'],
       designation: json['designation'],
+      birthPlace: json['birth_place'],
+      birthTime: json['birth_time'],
       additionalImages: (json['additional_images'] is List)
           ? List<String>.from(json['additional_images'])
           : [],

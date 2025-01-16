@@ -49,6 +49,8 @@ class ShortlistedModel {
   final String matchPercentage;
   final String parentContact;
   final String preferBodyType;
+  final String birthTime;
+  final String birthPlace;
 
   ShortlistedModel({
     required this.id,
@@ -101,6 +103,8 @@ class ShortlistedModel {
     required this.matchPercentage,
     required this.parentContact,
     required this.preferBodyType,
+    required this.birthPlace,
+    required this.birthTime,
   });
 
   factory ShortlistedModel.fromJson(Map<String, dynamic> json) {
@@ -155,6 +159,8 @@ class ShortlistedModel {
       parentContact: json['parent_contact'] ?? " ",
       preferBodyType: json['preference_body_type_name'] ?? "",
       blockPersonId: json['block_person'] ?? "",
+      birthPlace: json['birth_place'] ?? "",
+      birthTime: json['birth_time'] ?? "",
     );
   }
 }

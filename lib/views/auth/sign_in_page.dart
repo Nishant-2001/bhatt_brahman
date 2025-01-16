@@ -20,7 +20,6 @@ class SignInPage extends StatefulWidget {
 class _SignInPageState extends State<SignInPage> {
   final formKey = GlobalKey<FormState>();
 
-  bool _rememberMe = false;
 
   @override
   Widget build(BuildContext context) {

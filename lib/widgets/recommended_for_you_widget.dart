@@ -1,7 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:http/http.dart';
 import '../constants/instance.dart';
 import '../constants/text_style.dart';
 import '../controller/recommended_controller.dart';

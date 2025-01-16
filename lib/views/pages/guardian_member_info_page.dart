@@ -5,7 +5,6 @@ import '../../constants/app_constant.dart';
 import '../../constants/dimensions.dart';
 import '../../constants/text_style.dart';
 import '../../controller/guardian_committee_controller.dart';
-import '../../model/founder_committee_model.dart';
 import '../../model/guardian_committee_model.dart';
 
 class GuardianMemberInfoPage extends StatefulWidget {

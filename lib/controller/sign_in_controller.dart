@@ -1,6 +1,6 @@
 import 'dart:convert';
-import 'dart:developer';
-
+// import 'dart:developer';
+import 'package:bhatt_brahman_var_vadhu/services/notification_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -12,10 +12,11 @@ import '../views/home/home_page.dart';
 class SignInController extends GetxController {
   var isPasswordVisible = true.obs;
   var isLoading = false.obs;
-  var isRememberMe = false.obs;  
+  var isRememberMe = false.obs;
 
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final NotificationService notificationService = NotificationService();
 
   var emailError = ''.obs;
   var passwordError = ''.obs;
@@ -23,24 +24,24 @@ class SignInController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    loadSavedCredentials();  
+    loadSavedCredentials();
   }
 
-  
   Future<void> loadSavedCredentials() async {
     final prefs = await SharedPreferences.getInstance();
     final rememberedEmail = prefs.getString('remembered_email');
     final rememberedPassword = prefs.getString('remembered_password');
     final wasRemembered = prefs.getBool('was_remembered') ?? false;
 
-    if (wasRemembered && rememberedEmail != null && rememberedPassword != null) {
+    if (wasRemembered &&
+        rememberedEmail != null &&
+        rememberedPassword != null) {
       emailController.text = rememberedEmail;
       passwordController.text = rememberedPassword;
       isRememberMe.value = true;
     }
   }
 
- 
   Future<void> saveCredentials() async {
     final prefs = await SharedPreferences.getInstance();
     if (isRememberMe.value) {
@@ -62,6 +63,8 @@ class SignInController extends GetxController {
     try {
       var url = Uri.parse("${baseUrl}login");
 
+      String? deviceToken = await notificationService.getDeviceToken();
+
       final response = await http.post(
         url,
         headers: {
@@ -70,6 +73,7 @@ class SignInController extends GetxController {
         body: {
           'email': emailController.text.trim().toLowerCase(),
           'password': passwordController.text.trim(),
+          "device_token": deviceToken,
         },
       );
 
@@ -86,12 +90,12 @@ class SignInController extends GetxController {
 
         SharedPreferences prefs = await SharedPreferences.getInstance();
 
-        if (loginResponse.token != null) {
-          await prefs.setString('token', loginResponse.token!);
-        }
-
-        await prefs.setString('parent', jsonEncode(loginResponse.parent.toJson()));
-        await prefs.setString('userId', loginResponse.parent.loginId.toString());
+        await prefs.setString('token', loginResponse.token);
+      
+        await prefs.setString(
+            'parent', jsonEncode(loginResponse.parent.toJson()));
+        await prefs.setString(
+            'userId', loginResponse.parent.loginId.toString());
 
         if (childId != null) {
           await prefs.setString('childId', childId);
@@ -99,10 +103,8 @@ class SignInController extends GetxController {
 
         await prefs.setBool('is_logged_in', true);
 
-        
         await saveCredentials();
 
-        
         if (!isRememberMe.value) {
           _clearFormFields();
         }
@@ -158,7 +160,6 @@ class SignInController extends GetxController {
     passwordController.clear();
   }
 
-  
   Future<void> clearRememberedCredentials() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove('remembered_email');

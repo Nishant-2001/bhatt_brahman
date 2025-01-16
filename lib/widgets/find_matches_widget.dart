@@ -7,7 +7,6 @@ import '../constants/instance.dart';
 import '../controller/verification_controller.dart';
 import '../model/partner_model.dart';
 import '../views/pages/create_profile_page.dart';
-import '../views/pages/find_matches_page.dart';
 import '../views/pages/match_partner_page.dart';
 
 class FindMatchesWidget extends StatelessWidget {

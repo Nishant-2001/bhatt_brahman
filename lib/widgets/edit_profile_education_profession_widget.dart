@@ -85,15 +85,22 @@ class _EditProfileEducationProfessionWidgetState
                                     child: Text('No education available'));
                               }
 
-                              var educationList = snapshot.data!.educationList;
+                              // Filter out 'Any' and 'Other'
+                              var educationList = snapshot.data!.educationList
+                                  .where((education) =>
+                                      education.name != 'Any' &&
+                                      education.name != 'Other')
+                                  .toList();
 
                               EducationModel? selectedEducation =
                                   editProfileController.selectedEducation !=
                                           null
-                                      ? educationList.firstWhere((p) =>
-                                          p.id ==
-                                          editProfileController
-                                              .selectedEducation)
+                                      ? educationList.firstWhereOrNull(
+                                          (p) =>
+                                              p.id ==
+                                              editProfileController
+                                                  .selectedEducation,
+                                        )
                                       : null;
 
                               return DropdownSearch<EducationModel>(
@@ -126,8 +133,7 @@ class _EditProfileEducationProfessionWidgetState
                                     ),
                                   ),
                                   fit: FlexFit.loose,
-                                  constraints:
-                                      const BoxConstraints(maxHeight: 350),
+                                  constraints: BoxConstraints(maxHeight: 350),
                                 ),
                                 validator: (value) {
                                   if (value == null) {
@@ -162,94 +168,95 @@ class _EditProfileEducationProfessionWidgetState
                           ),
                           height(8),
                           Expanded(
-                            child: FutureBuilder<ProfessionResponse>(
-                              future: futureprofessionList,
-                              builder: (context, snapshot) {
-                                if (snapshot.connectionState ==
-                                    ConnectionState.waiting) {
-                                  return const Center(
-                                      child: CupertinoActivityIndicator());
-                                } else if (snapshot.hasError) {
-                                  return Center(
-                                      child: Text('Error: ${snapshot.error}'));
-                                } else if (!snapshot.hasData ||
-                                    snapshot.data?.professionList.isEmpty ==
-                                        true) {
-                                  return const Center(
-                                      child: Text('No profession available'));
-                                }
+                              child: FutureBuilder<ProfessionResponse>(
+                            future: futureprofessionList,
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return const Center(
+                                    child: CupertinoActivityIndicator());
+                              } else if (snapshot.hasError) {
+                                return Center(
+                                    child: Text('Error: ${snapshot.error}'));
+                              } else if (!snapshot.hasData ||
+                                  snapshot.data?.professionList.isEmpty ==
+                                      true) {
+                                return const Center(
+                                    child: Text('No profession available'));
+                              }
 
-                                var professionList =
-                                    snapshot.data!.professionList;
-                                var uniqueProfessions =
-                                    professionList.toSet().toList();
-                                var selectedValue =
-                                    editProfileController.selectedProfession;
+                              // Filter out 'Any' and 'Other'
+                              var professionList = snapshot.data!.professionList
+                                  .where((profession) =>
+                                      profession.name != 'Any' &&
+                                      profession.name != 'Other')
+                                  .toList();
 
-                                ProfessionModel? currentProfession =
-                                    selectedValue != null
-                                        ? uniqueProfessions.firstWhere(
-                                            (profession) =>
-                                                profession.id == selectedValue,
-                                          )
-                                        : null;
+                              var uniqueProfessions =
+                                  professionList.toSet().toList();
+                              var selectedValue =
+                                  editProfileController.selectedProfession;
 
-                                return DropdownSearch<ProfessionModel>(
-                                  popupProps: const PopupProps.menu(
-                                    showSearchBox: true,
-                                    searchFieldProps: TextFieldProps(
-                                      decoration: InputDecoration(
-                                        hintText: "Search...",
-                                      ),
+                              ProfessionModel? currentProfession =
+                                  selectedValue != null
+                                      ? uniqueProfessions.firstWhere(
+                                          (profession) =>
+                                              profession.id == selectedValue,
+                                        )
+                                      : null;
+
+                              return DropdownSearch<ProfessionModel>(
+                                popupProps: const PopupProps.menu(
+                                  showSearchBox: true,
+                                  searchFieldProps: TextFieldProps(
+                                    decoration: InputDecoration(
+                                      hintText: "Search...",
                                     ),
-                                    fit: FlexFit.loose,
-                                    constraints: BoxConstraints(maxHeight: 350),
                                   ),
-                                  dropdownDecoratorProps:
-                                      DropDownDecoratorProps(
-                                          dropdownSearchDecoration:
-                                              InputDecoration(
-                                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                  ))),
-                                  selectedItem: currentProfession,
-                                  items: uniqueProfessions,
-                                  itemAsString: (ProfessionModel profession) =>
-                                      profession.name,
-                                  dropdownBuilder: (context, selectedItem) {
-                                    return Container(
-                                      padding: const EdgeInsets.symmetric(
-                                        horizontal: 10,
-                                      ),
-                                      child: Text(
-                                        selectedItem?.name ?? 'Select',
-                                        style: customTextStyle(
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.w400),
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                    );
-                                  },
-                                  onChanged: (ProfessionModel? newValue) {
-                                    if (newValue != null) {
-                                      setState(() {
-                                        editProfileController
-                                            .selectedProfession = newValue.id;
-                                        // print(
-                                        //     "Selected profession ID: ${newValue.id}");
-                                      });
-                                    }
-                                  },
-                                  validator: (value) {
-                                    if (value == null) {
-                                      return 'Please select profession';
-                                    }
-                                    return null;
-                                  },
-                                );
-                              },
-                            ),
-                          ),
+                                  fit: FlexFit.loose,
+                                  constraints: BoxConstraints(maxHeight: 350),
+                                ),
+                                dropdownDecoratorProps: DropDownDecoratorProps(
+                                  dropdownSearchDecoration: InputDecoration(
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                  ),
+                                ),
+                                selectedItem: currentProfession,
+                                items: uniqueProfessions,
+                                itemAsString: (ProfessionModel profession) =>
+                                    profession.name,
+                                dropdownBuilder: (context, selectedItem) {
+                                  return Container(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 10),
+                                    child: Text(
+                                      selectedItem?.name ?? 'Select',
+                                      style: customTextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w400),
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  );
+                                },
+                                onChanged: (ProfessionModel? newValue) {
+                                  if (newValue != null) {
+                                    setState(() {
+                                      editProfileController.selectedProfession =
+                                          newValue.id;
+                                    });
+                                  }
+                                },
+                                validator: (value) {
+                                  if (value == null) {
+                                    return 'Please select profession';
+                                  }
+                                  return null;
+                                },
+                              );
+                            },
+                          )),
                         ],
                       ),
                     )
@@ -359,11 +366,14 @@ class _EditProfileEducationProfessionWidgetState
                   return Center(child: Text('Error: ${snapshot.error}'));
                 } else if (!snapshot.hasData ||
                     snapshot.data?.locationList.isEmpty == true) {
-                  return const Center(child: Text('No education available'));
+                  return const Center(child: Text('No location available'));
                 }
 
-                var locationList = snapshot.data!.locationList;
-                // var selectedValue = editProfileController.selectedLocation;
+                // Filter out 'Any' and 'Others' locations
+                var locationList = snapshot.data!.locationList
+                    .where((location) =>
+                        location.name != 'Any' && location.name != 'Other')
+                    .toList();
 
                 LocationModel? selectedLocation =
                     editProfileController.selectedLocation != null
@@ -393,7 +403,8 @@ class _EditProfileEducationProfessionWidgetState
                     searchFieldProps: TextFieldProps(
                       decoration: InputDecoration(
                         border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10)),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
                         hintText: "Search...",
                         prefixIcon: const Icon(Icons.search),
                       ),
@@ -402,10 +413,12 @@ class _EditProfileEducationProfessionWidgetState
                     constraints: const BoxConstraints(maxHeight: 350),
                   ),
                   dropdownDecoratorProps: DropDownDecoratorProps(
-                      dropdownSearchDecoration: InputDecoration(
-                          border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ))),
+                    dropdownSearchDecoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                  ),
                   dropdownButtonProps: const DropdownButtonProps(
                     color: Color(0xff9C9C9C),
                   ),

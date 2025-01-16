@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import '../../constants/dimensions.dart';
 import '../../constants/instance.dart';
 import '../../constants/text_style.dart';
-import 'otp_verification_page.dart';
 
 class ForgotPasswordPage extends StatelessWidget {
   const ForgotPasswordPage({super.key});

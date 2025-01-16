@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:developer';
+// import 'dart:developer';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import '../model/prefferences_model.dart';
@@ -53,11 +53,11 @@ class PrefferencesController {
   }
 
   Future<void> checkSavedUserId() async {
-    final prefs = await SharedPreferences.getInstance();
+    // final prefs = await SharedPreferences.getInstance();
 
-    final normalUserId = prefs.getString('userId');
-    final childId = prefs.getString('child_id');
-    final allKeys = prefs.getKeys();
+    // final normalUserId = prefs.getString('userId');
+    // final childId = prefs.getString('child_id');
+    // final allKeys = prefs.getKeys();
 
     // log('[Debug] userId: $normalUserId');
     // log('[Debug] child_id: $childId');

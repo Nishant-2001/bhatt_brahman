@@ -214,7 +214,7 @@ class _MinAgeHeightWidgetState extends State<MinAgeHeightWidget> {
   Widget build(BuildContext context) {
     return SizedBox(
       width: Get.width,
-      height: Get.height * 0.085,
+      height: Get.height * 0.082,
       child: Row(
         children: [
           Expanded(

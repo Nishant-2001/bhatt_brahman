@@ -64,6 +64,9 @@ class UserData {
   final String? preferEducation;
   final String? preferProfession;
   final String? preferLocation;
+  final String? birthTime;
+  final String? birthPlace;
+  final String? age;
 
   UserData({
     required this.id,
@@ -109,6 +112,9 @@ class UserData {
     this.preferMinHeight,
     this.preferProfession,
     this.preferSkinComplexion,
+    this.birthPlace,
+    this.birthTime,
+    this.age,
   });
 
   factory UserData.fromJson(Map<String, dynamic> json) {
@@ -123,6 +129,7 @@ class UserData {
       email: json['email'],
       about: json['about'],
       dob: json['dob'],
+      age: json['age'],
       height: json['height'],
       weight: json['weight'],
       income: json['income'],
@@ -155,6 +162,8 @@ class UserData {
       preferEducation: json['preference_education'],
       preferProfession: json['preference_profession'],
       preferLocation: json['preference_lives_in'],
+      birthPlace: json['birth_place'],
+      birthTime: json['birth_time']
     );
   }
 }

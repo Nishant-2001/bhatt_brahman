@@ -10,6 +10,7 @@ import '../../constants/instance.dart';
 import '../../constants/text_style.dart';
 import '../../model/Shortlisted_model.dart';
 import 'favourites_detail_page.dart';
+import 'notification_page.dart';
 
 class FavouritesPage extends StatefulWidget {
   const FavouritesPage({super.key});
@@ -47,7 +48,7 @@ class _FavouritesPageState extends State<FavouritesPage> {
           mode: LaunchMode.platformDefault,
         );
       } else {
-        print('Cannot launch URL: $telUri');
+        // print('Cannot launch URL: $telUri');
         Get.snackbar(
           "Error",
           "Unable to open phone dialer",
@@ -55,7 +56,7 @@ class _FavouritesPageState extends State<FavouritesPage> {
         );
       }
     } catch (e) {
-      print('Error launching phone dialer: $e');
+      // print('Error launching phone dialer: $e');
       Get.snackbar(
         "Error",
         "Failed to launch phone dialer",
@@ -83,17 +84,22 @@ class _FavouritesPageState extends State<FavouritesPage> {
         ),
         centerTitle: true,
         actions: [
-          IconButton(
-            onPressed: () {},
-            icon: Image.asset(
-              'assets/Vector.png',
-              height: 24,
-              width: 24,
+          // IconButton(
+          //   onPressed: () {},
+          //   icon: Image.asset(
+          //     'assets/Vector.png',
+          //     height: 24,
+          //     width: 24,
+          //   ),
+          // ),
+          GestureDetector(
+            onTap: () {
+              Get.to(() => const NotificationPage());
+            },
+            child: const Icon(
+              Icons.notifications_outlined,
+              size: 28,
             ),
-          ),
-          const Icon(
-            Icons.notifications_outlined,
-            size: 28,
           ),
           width(15),
         ],
@@ -305,9 +311,8 @@ class _FavouritesPageState extends State<FavouritesPage> {
                                                   try {
                                                     String? contactNumber =
                                                         profile.parentContact;
-                                                    if (contactNumber != null &&
-                                                        contactNumber
-                                                            .isNotEmpty) {
+                                                    if (contactNumber
+                                                        .isNotEmpty) {
                                                       _launchPhoneDialer(
                                                           contactNumber);
                                                     } else {
@@ -320,8 +325,8 @@ class _FavouritesPageState extends State<FavouritesPage> {
                                                       );
                                                     }
                                                   } catch (e) {
-                                                    print(
-                                                        'Error getting contact number: $e');
+                                                    // print(
+                                                    //     'Error getting contact number: $e');
                                                     Get.snackbar(
                                                       "Error",
                                                       "Failed to get contact number",
@@ -372,25 +377,18 @@ class _FavouritesPageState extends State<FavouritesPage> {
                                                   String? contactNumber =
                                                       profile.parentContact;
 
-                                                  if (contactNumber != null) {
-                                                    String phoneNumber =
-                                                        contactNumber
-                                                            .replaceAll(
-                                                                RegExp(r'\D'),
-                                                                '');
+                                                  String phoneNumber =
+                                                      contactNumber.replaceAll(
+                                                          RegExp(r'\D'), '');
 
-                                                    String whatsappUrl =
-                                                        "https://wa.me/+91$phoneNumber";
-                                                    if (await canLaunch(
-                                                        whatsappUrl)) {
-                                                      await launch(whatsappUrl);
-                                                    } else {
-                                                      Get.snackbar("Error",
-                                                          "Unable to open WhatsApp");
-                                                    }
+                                                  String whatsappUrl =
+                                                      "https://wa.me/+91$phoneNumber";
+                                                  if (await canLaunch(
+                                                      whatsappUrl)) {
+                                                    await launch(whatsappUrl);
                                                   } else {
                                                     Get.snackbar("Error",
-                                                        "Contact number not found");
+                                                        "Unable to open WhatsApp");
                                                   }
                                                 },
                                                 child: Container(

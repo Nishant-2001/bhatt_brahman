@@ -53,6 +53,8 @@ class ExpressedInterestModel {
   final String? raasi;
   final String? fatherName;
   final String? matchPercentage;
+  final String? birthTime;
+  final String? birthPlace;
 
   ExpressedInterestModel({
     this.id,
@@ -109,6 +111,8 @@ class ExpressedInterestModel {
     this.raasi,
     this.fatherName,
     this.matchPercentage,
+    this.birthTime,
+    this.birthPlace,
   });
 
   factory ExpressedInterestModel.fromJson(Map<String, dynamic> json) {
@@ -159,6 +163,9 @@ class ExpressedInterestModel {
         preferEducation: json['preference_education_name'],
         preferProfession: json['preference_profession_name'],
         preferlivesIn: json['preference_lives_in_name'],
-        matchPercentage: json['match_percentage']);
+        matchPercentage: json['match_percentage'],
+        birthPlace: json['birth_place'],
+        birthTime: json['birth_time'],
+        );
   }
 }

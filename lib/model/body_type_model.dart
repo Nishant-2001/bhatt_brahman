@@ -19,7 +19,8 @@ class BodyTypeResponse {
 
   factory BodyTypeResponse.fromJson(Map<String, dynamic> json) {
     var list = json['data']['body_type'] as List;
-    List<BodyTypeModel> bodyTypeList = list.map((i) => BodyTypeModel.fromJson(i)).toList();
+    List<BodyTypeModel> bodyTypeList =
+        list.map((i) => BodyTypeModel.fromJson(i)).toList();
 
     return BodyTypeResponse(bodyTypes: bodyTypeList);
   }

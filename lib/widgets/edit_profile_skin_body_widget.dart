@@ -65,7 +65,12 @@ class _EditProfileSkinBodyWidgetState extends State<EditProfileSkinBodyWidget> {
                             child: Text('No body types available'));
                       }
 
-                      var bodyTypes = snapshot.data!.bodyTypes;
+                      // Filter out 'Any' and 'Other'
+                      var bodyTypes = snapshot.data!.bodyTypes
+                          .where((bodyType) =>
+                              bodyType.name != 'Any' &&
+                              bodyType.name != 'Other')
+                          .toList();
 
                       final selectedValue =
                           editProfileController.selectedBodyType;
@@ -126,62 +131,69 @@ class _EditProfileSkinBodyWidgetState extends State<EditProfileSkinBodyWidget> {
                 ),
                 height(8),
                 Flexible(
-                    child: FutureBuilder<SkinComplexionResponse>(
-                  future: futureskinComplexionList,
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Center(child: CupertinoActivityIndicator());
-                    } else if (snapshot.hasError) {
-                      return const Center(
-                          child: Text('Error: \${snapshot.error}'));
-                    } else if (!snapshot.hasData ||
-                        snapshot.data?.skinComplexionList.isEmpty == true) {
-                      return const Center(child: Text('Not available'));
-                    }
+                  child: FutureBuilder<SkinComplexionResponse>(
+                    future: futureskinComplexionList,
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(
+                            child: CupertinoActivityIndicator());
+                      } else if (snapshot.hasError) {
+                        return const Center(
+                            child: Text('Error: \${snapshot.error}'));
+                      } else if (!snapshot.hasData ||
+                          snapshot.data?.skinComplexionList.isEmpty == true) {
+                        return const Center(child: Text('Not available'));
+                      }
 
-                    var skinComplexionList = snapshot.data!.skinComplexionList;
+                      // Filter out 'Any' and 'Other'
+                      var skinComplexionList = snapshot.data!.skinComplexionList
+                          .where((skinComplexion) =>
+                              skinComplexion.name != 'Any' &&
+                              skinComplexion.name != 'Other')
+                          .toList();
 
-                    final selectedValue =
-                        editProfileController.selectedSkinComplextion;
+                      final selectedValue =
+                          editProfileController.selectedSkinComplextion;
 
-                    return DropdownButtonFormField<String>(
-                      value: selectedValue,
-                      hint: Text(
-                        'Select',
-                        style: customTextStyle(fontSize: 14),
-                      ),
-                      onChanged: (newValue) {
-                        setState(() {
-                          editProfileController.selectedSkinComplextion =
-                              newValue;
-                        });
-                      },
-                      items: skinComplexionList.map((skinComplexion) {
-                        return DropdownMenuItem<String>(
-                          value: skinComplexion.id,
-                          child: Text(
-                            skinComplexion.name,
-                            style: customTextStyle(
-                                fontSize: 14, fontWeight: FontWeight.w500),
-                          ),
-                        );
-                      }).toList(),
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide:
-                              const BorderSide(color: Color(0xff9C9C9C)),
+                      return DropdownButtonFormField<String>(
+                        value: selectedValue,
+                        hint: Text(
+                          'Select',
+                          style: customTextStyle(fontSize: 14),
                         ),
-                      ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return "Required";
-                        }
-                        return null;
-                      },
-                    );
-                  },
-                )),
+                        onChanged: (newValue) {
+                          setState(() {
+                            editProfileController.selectedSkinComplextion =
+                                newValue;
+                          });
+                        },
+                        items: skinComplexionList.map((skinComplexion) {
+                          return DropdownMenuItem<String>(
+                            value: skinComplexion.id,
+                            child: Text(
+                              skinComplexion.name,
+                              style: customTextStyle(
+                                  fontSize: 14, fontWeight: FontWeight.w500),
+                            ),
+                          );
+                        }).toList(),
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide:
+                                const BorderSide(color: Color(0xff9C9C9C)),
+                          ),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "Required";
+                          }
+                          return null;
+                        },
+                      );
+                    },
+                  ),
+                ),
               ],
             ),
           )

@@ -1,4 +1,4 @@
-import 'package:Bhatt_Brahman_Var_Vadhu/model/partner_model.dart';
+import 'package:bhatt_brahman_var_vadhu/model/partner_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -93,6 +93,7 @@ class _RecommendedForYouDetailPageState
   }
 
   void showReportDialog(BuildContext context) {
+    final _formKey = GlobalKey<FormState>();
     showDialog(
       context: context,
       builder: (context) {
@@ -104,61 +105,72 @@ class _RecommendedForYouDetailPageState
             width: Get.width * 0.9,
             child: Padding(
               padding: const EdgeInsets.all(16.0),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "Report",
-                    style: customTextStyle(
-                        fontSize: 16, fontWeight: FontWeight.w500),
-                  ),
-                  height(Get.height * 0.03),
-                  TextFormField(
-                    controller: reportController.descriptionController,
-                    decoration: InputDecoration(
-                        hintText: "Enter Description...",
-                        hintStyle: customTextStyle(
-                            fontSize: 14, fontWeight: FontWeight.w400),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        )),
-                    maxLines: 6,
-                  ),
-                  height(Get.height * 0.03),
-                  Material(
-                    child: GestureDetector(
-                      onTap: () {
-                        Navigator.of(context).pop();
-                        showConfirmation(context);
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Report",
+                      style: customTextStyle(
+                          fontSize: 16, fontWeight: FontWeight.w500),
+                    ),
+                    height(Get.height * 0.03),
+                    TextFormField(
+                      controller: reportController.descriptionController,
+                      decoration: InputDecoration(
+                          hintText: "Enter Description...",
+                          hintStyle: customTextStyle(
+                              fontSize: 14, fontWeight: FontWeight.w400),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          )),
+                      maxLines: 6,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Enter report description";
+                        }
+                        return null;
                       },
-                      child: Container(
-                        width: Get.width,
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                            color: const Color(0xffffffff),
-                            gradient: const LinearGradient(
-                              colors: [Color(0xff2A3171), Color(0xff4E5CD3)],
-                              begin: Alignment.centerLeft,
-                              end: Alignment.centerRight,
+                    ),
+                    height(Get.height * 0.03),
+                    Material(
+                      child: GestureDetector(
+                        onTap: () {
+                          if (_formKey.currentState!.validate()) {
+                            Navigator.of(context).pop();
+                            showConfirmation(context);
+                          }
+                        },
+                        child: Container(
+                          width: Get.width,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                              color: const Color(0xffffffff),
+                              gradient: const LinearGradient(
+                                colors: [Color(0xff2A3171), Color(0xff4E5CD3)],
+                                begin: Alignment.centerLeft,
+                                end: Alignment.centerRight,
+                              ),
+                              borderRadius: BorderRadius.circular(25)),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 7.0),
+                            child: Text(
+                              "Submit",
+                              style: GoogleFonts.sourceSans3(
+                                  textStyle: const TextStyle(
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: 16,
+                                      color: Color(0xffffffff))),
+                              textAlign: TextAlign.center,
                             ),
-                            borderRadius: BorderRadius.circular(25)),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 7.0),
-                          child: Text(
-                            "Submit",
-                            style: GoogleFonts.sourceSans3(
-                                textStyle: const TextStyle(
-                                    fontWeight: FontWeight.w700,
-                                    fontSize: 16,
-                                    color: Color(0xffffffff))),
-                            textAlign: TextAlign.center,
                           ),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
@@ -332,12 +344,14 @@ class _RecommendedForYouDetailPageState
                                 TableCellVerticalAlignment.middle,
                             children: [
                               buildRow(
-                                  "Phone No. :", widget.partner.contact ?? ""),
+                                  "Phone No. :", widget.partner.contact),
                               buildRow(
-                                  "Date of Birth :", widget.partner.dob ?? ""),
+                                  "Date of Birth :", widget.partner.dob),
                               buildRow("Age (yrs) :", widget.partner.age ?? ""),
+                              buildRow("Birth Time :", widget.partner.birthTime ?? ""),
+                              buildRow("Birth Place :", widget.partner.birthPlace ?? ""),
                               buildRow("Height (in cm) :",
-                                  widget.partner.height ?? ""),
+                                  widget.partner.height),
                               buildRow("Weight (in kg) :",
                                   widget.partner.weight ?? ""),
                               buildRow("Blood Group :",
@@ -499,12 +513,10 @@ class _RecommendedForYouDetailPageState
                             children: [
                               buildRow(
                                   "Preferred Age :",
-                                  "${widget.partner.preferMinAge} - ${widget.partner.preferMaxAge}" ??
-                                      ""),
+                                  "${widget.partner.preferMinAge} - ${widget.partner.preferMaxAge}"),
                               buildRow(
                                   "Preferred Height :",
-                                  "${widget.partner.preferMinHeight} - ${widget.partner.preferMaxHeight}" ??
-                                      ""),
+                                  "${widget.partner.preferMinHeight} - ${widget.partner.preferMaxHeight}"),
                               buildRow("Preferred Body Type :",
                                   widget.partner.preferedBodyType ?? ""),
                               buildRow("Preferred Skin Complextion :",

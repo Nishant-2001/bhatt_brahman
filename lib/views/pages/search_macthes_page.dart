@@ -14,6 +14,7 @@ import '../../widgets/body_skin_type_widget.dart';
 import '../../widgets/education_profession_widget.dart';
 import '../../widgets/min_age_height_widget.dart';
 import 'find_matches_page.dart';
+import 'notification_page.dart';
 
 class SearchMacthesPage extends StatefulWidget {
   const SearchMacthesPage({super.key});
@@ -41,16 +42,21 @@ class _SearchMacthesPageState extends State<SearchMacthesPage> {
         backgroundColor: AppConstant.appMainColor,
         iconTheme: const IconThemeData(color: Color(0xffffffff)),
         actions: [
-          const Icon(
-            Icons.notifications_outlined,
-            size: 28,
+          GestureDetector(
+            onTap: () {
+              Get.to(() => const NotificationPage());
+            },
+            child: const Icon(
+              Icons.notifications_outlined,
+              size: 28,
+            ),
           ),
           width(20)
         ],
       ),
       body: Padding(
         padding: const EdgeInsets.only(top: 20.0),
-        child: Column(
+        child: Column(    
           children: [
             Center(
               child: Container(

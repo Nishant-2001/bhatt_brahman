@@ -1,4 +1,6 @@
-import 'package:Bhatt_Brahman_Var_Vadhu/constants/instance.dart';
+import 'package:bhatt_brahman_var_vadhu/constants/instance.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -7,6 +9,7 @@ import '../../constants/dimensions.dart';
 import '../../constants/text_style.dart';
 import '../../model/partner_model.dart';
 import 'find_match_profile_page.dart';
+import 'notification_page.dart';
 
 class MatchPartnerPage extends StatelessWidget {
   final List<PartnerModel> partners;
@@ -33,17 +36,22 @@ class MatchPartnerPage extends StatelessWidget {
         ),
         centerTitle: true,
         actions: [
-          IconButton(
-            onPressed: () {},
-            icon: Image.asset(
-              'assets/Vector.png',
-              height: 24,
-              width: 24,
+          // IconButton(
+          //   onPressed: () {},
+          //   icon: Image.asset(
+          //     'assets/Vector.png',
+          //     height: 24,
+          //     width: 24,
+          //   ),
+          // ),
+          GestureDetector(
+            onTap: () {
+              Get.to(() => const NotificationPage());
+            },
+            child: const Icon(
+              Icons.notifications_outlined,
+              size: 28,
             ),
-          ),
-          const Icon(
-            Icons.notifications_outlined,
-            size: 28,
           ),
           width(15),
         ],
@@ -114,8 +122,24 @@ class MatchPartnerPage extends StatelessWidget {
                                         vertical: 3.0),
                                     child: ListTile(
                                       leading: CircleAvatar(
-                                        backgroundImage: NetworkImage(
-                                            "${partner.profileImg}"),
+                                        child: ClipOval(
+                                          child: CachedNetworkImage(
+                                            imageUrl: "${partner.profileImg}",
+                                            placeholder: (context, url) =>
+                                                const CupertinoActivityIndicator(),
+                                            errorWidget:
+                                                (context, url, error) =>
+                                                    Image.asset(
+                                              partner.userType == "Bride"
+                                                  ? "assets/bride.jpg"
+                                                  : "assets/groom.jpg",
+                                              fit: BoxFit.cover,
+                                            ),
+                                            fit: BoxFit.cover,
+                                            width: double.infinity,
+                                            height: double.infinity,
+                                          ),
+                                        ),
                                       ),
                                       title: Text(
                                         "${partner.firstName} ${partner.lastName}",
@@ -163,7 +187,7 @@ class MatchPartnerPage extends StatelessWidget {
                                                 ),
                                                 width(4),
                                                 Text(
-                                                  "${partner.livesIn?.split('').first}...",
+                                                  "${partner.livesIn?.split(' ').first}...",
                                                   style: customTextStyle(
                                                       fontSize: 10,
                                                       fontWeight:

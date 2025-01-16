@@ -9,21 +9,20 @@ import '../constants/instance.dart';
 import '../views/pages/pending_request_detail_page.dart';
 
 class PendingInterestedWidget extends StatefulWidget {
-  PendingInterestedWidget({super.key}) {
-    
-  }
+  const PendingInterestedWidget({super.key});
 
   @override
-  State<PendingInterestedWidget> createState() => _PendingInterestedWidgetState();
+  State<PendingInterestedWidget> createState() =>
+      _PendingInterestedWidgetState();
 }
 
 class _PendingInterestedWidgetState extends State<PendingInterestedWidget> {
   final InterestPendingController controller =
       Get.put(InterestPendingController());
 
-      @override
+  @override
   void initState() {
-     super.initState(); 
+    super.initState();
     controller.fetchInterestPendingList();
   }
 
